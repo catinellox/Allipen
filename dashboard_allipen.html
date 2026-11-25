@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tesorería · Comunidad Allipen</title>
+<title>Tesorería Allipen</title>
 <script>/*!
  * Chart.js v4.4.1
  * https://www.chartjs.org
@@ -21,543 +21,362 @@
 </script>
 <style>
   :root{
-    --tinta:#13241c; --papel:#f6f4ee; --verde:#1a5e2a; --verde-cl:#e3efe6;
-    --rojo:#b4100f; --rojo-cl:#f7e3e2; --ambar:#c98a15; --azul:#1565c0; --azul-cl:#e4eef9;
-    --morado:#6a1b9a; --morado-cl:#efe5f5; --linea:#d9d4c7; --gris:#6b6457;
+    --tinta:#1a2420; --papel:#f4f1ea; --tarjeta:#ffffff; --linea:#ddd6c8;
+    --verde:#15823c; --verde-bg:#e4f3e8; --ambar:#c87f0a; --ambar-bg:#fbf0d8;
+    --rojo:#c0271e; --rojo-bg:#f9e2e0; --azul:#1565c0; --azul-bg:#e4eef9;
+    --morado:#7b2a9a; --morado-bg:#f1e5f6; --gris:#6a6356;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    background:var(--papel);color:var(--tinta);line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+  body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+    background:var(--papel);color:var(--tinta);line-height:1.5;font-size:17px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  .num{font-variant-numeric:tabular-nums}
 
-  header{border-bottom:2px solid var(--tinta);padding:28px 0 22px;margin-bottom:4px}
-  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--verde);font-weight:700}
-  h1{font-size:30px;font-weight:800;letter-spacing:-.02em;margin-top:6px;line-height:1.1}
-  .sub{color:var(--gris);font-size:13px;margin-top:6px}
+  header{background:var(--tinta);color:#fff;padding:22px 0 20px}
+  header .eyebrow{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fd3af;font-weight:700}
+  header h1{font-size:34px;font-weight:800;letter-spacing:-.01em;margin-top:4px}
+  header .sub{font-size:15px;color:#d6d1c6;margin-top:6px}
 
-  nav{position:sticky;top:0;background:var(--papel);z-index:20;border-bottom:1px solid var(--linea);
-    display:flex;gap:2px;flex-wrap:wrap;padding:8px 0}
-  nav button{background:none;border:none;font-family:inherit;font-size:13px;font-weight:600;
-    color:var(--gris);padding:9px 16px;cursor:pointer;border-radius:7px;transition:.15s;white-space:nowrap}
-  nav button:hover{background:var(--verde-cl);color:var(--verde)}
-  nav button.on{background:var(--tinta);color:var(--papel)}
+  nav{position:sticky;top:0;z-index:30;background:var(--papel);border-bottom:2px solid var(--tinta);
+    display:flex;gap:4px;overflow-x:auto;padding:8px 0}
+  nav button{flex:0 0 auto;background:none;border:none;font-family:inherit;font-size:16px;font-weight:700;
+    color:var(--gris);padding:11px 18px;cursor:pointer;border-radius:10px;white-space:nowrap;transition:.12s}
+  nav button:hover{background:#e8e2d5}
+  nav button.on{background:var(--tinta);color:#fff}
 
-  .panel{display:none;padding:26px 0 60px;animation:fade .3s ease}
+  .panel{display:none;padding:22px 0 70px;animation:fade .25s ease}
   .panel.on{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
 
-  .grid{display:grid;gap:16px}
-  .g4{grid-template-columns:repeat(4,1fr)}
-  .g3{grid-template-columns:repeat(3,1fr)}
-  .g2{grid-template-columns:repeat(2,1fr)}
-  @media(max-width:860px){.g4,.g3,.g2{grid-template-columns:1fr 1fr}}
-  @media(max-width:560px){.g4,.g3,.g2{grid-template-columns:1fr}}
+  h2.sec{font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);font-weight:800;margin:6px 0 14px}
 
-  .kpi{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:18px 18px 16px;position:relative;overflow:hidden}
-  .kpi .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--gris);font-weight:600}
-  .kpi .val{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:8px;font-variant-numeric:tabular-nums}
-  .kpi .note{font-size:11px;color:var(--gris);margin-top:4px}
-  .kpi .bar{position:absolute;left:0;top:0;bottom:0;width:4px}
-  .b-verde{background:var(--verde)} .b-rojo{background:var(--rojo)}
-  .b-azul{background:var(--azul)} .b-morado{background:var(--morado)}
-  .pos{color:var(--verde)} .neg{color:var(--rojo)}
+  /* ---- Bloques grandes del resumen ---- */
+  .bloque{background:var(--tarjeta);border:1px solid var(--linea);border-radius:16px;padding:22px 24px;margin-bottom:16px;border-left:8px solid var(--gris)}
+  .bloque.b-op{border-left-color:var(--rojo)}
+  .bloque.b-fondo{border-left-color:var(--morado)}
+  .bloque.b-caja{border-left-color:var(--azul)}
+  .bloque .et{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--gris)}
+  .bloque .cifra{font-size:46px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:6px 0}
+  .bloque .expl{font-size:16px;color:#4a4639;max-width:70ch}
+  .bloque .mini{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:12px}
+  .bloque .mini div{font-size:15px}
+  .bloque .mini b{font-size:19px;display:block}
+  .pos{color:var(--verde)} .neg{color:var(--rojo)} .inf{color:var(--azul)} .mor{color:var(--morado)}
 
-  .card{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:20px;margin-bottom:16px}
-  .card h3{font-size:14px;font-weight:700;margin-bottom:2px}
-  .card .desc{font-size:12px;color:var(--gris);margin-bottom:16px}
-  .chart-box{position:relative;height:300px}
-  .chart-box.tall{height:360px}
+  .headline{font-size:22px;font-weight:700;line-height:1.4;margin-bottom:18px;background:var(--tarjeta);
+    border:1px solid var(--linea);border-radius:14px;padding:18px 22px}
+  .headline .big{font-size:30px;font-weight:800}
 
-  table{width:100%;border-collapse:collapse;font-size:12px}
-  th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--gris);
-    font-weight:700;padding:8px 10px;border-bottom:2px solid var(--linea);position:sticky;top:0;background:#fff;box-shadow:0 1px 0 var(--linea)}
-  td{padding:7px 10px;border-bottom:1px solid #efece3;font-variant-numeric:tabular-nums}
-  tr:hover td{background:var(--verde-cl)}
-  .tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
-  .t-C{background:var(--verde-cl);color:var(--verde)} .t-P{background:#fbf0d8;color:var(--ambar)}
-  .t-F{background:var(--azul-cl);color:var(--azul)}
-  .money-e{color:var(--rojo)} .money-a{color:var(--verde);font-weight:600}
+  /* ---- Semáforo de casas ---- */
+  .semaforo{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:4px 0 8px}
+  @media(max-width:620px){.semaforo{grid-template-columns:repeat(2,1fr)}}
+  .semc{border-radius:14px;padding:16px 14px;text-align:center;border:2px solid}
+  .semc .letra{font-size:34px;font-weight:800;line-height:1}
+  .semc .nm{font-size:13px;margin-top:2px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .semc .est{font-size:14px;font-weight:800;margin-top:8px;text-transform:uppercase;letter-spacing:.03em}
+  .s-verde{background:var(--verde-bg);border-color:var(--verde);color:var(--verde)}
+  .s-ambar{background:var(--ambar-bg);border-color:var(--ambar);color:var(--ambar)}
+  .s-rojo{background:var(--rojo-bg);border-color:var(--rojo);color:var(--rojo)}
 
-  .filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-  .filtros select,.filtros input{font-family:inherit;font-size:12px;padding:7px 10px;border:1px solid var(--linea);
-    border-radius:7px;background:#fff;color:var(--tinta)}
-  .filtros .count{font-size:12px;color:var(--gris);margin-left:auto}
-  .tbl-scroll{max-height:560px;overflow-y:auto;border:1px solid var(--linea);border-radius:10px}
+  /* ---- Tarjetas por casa ---- */
+  .fichas{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.fichas{grid-template-columns:1fr}}
+  .ficha{background:var(--tarjeta);border:1px solid var(--linea);border-radius:16px;overflow:hidden}
+  .ficha .cab{display:flex;align-items:center;gap:14px;padding:16px 18px;color:#fff}
+  .ficha .cab .letra{width:54px;height:54px;border-radius:12px;background:rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;flex-shrink:0}
+  .ficha .cab .tit{font-size:20px;font-weight:800;line-height:1.15}
+  .ficha .cab .estado{font-size:15px;font-weight:700;margin-top:1px;opacity:.95}
+  .ficha .cuerpo{padding:14px 18px 18px}
+  .barra{height:22px;border-radius:11px;background:#eceadf;overflow:hidden;margin:4px 0 6px}
+  .barra span{display:block;height:100%;border-radius:11px}
+  .barlbl{display:flex;justify-content:space-between;font-size:14px;color:var(--gris);font-weight:600;margin-bottom:10px}
+  .lineas{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+  .ln{display:flex;justify-content:space-between;align-items:baseline;font-size:16px;border-bottom:1px solid #f0ede4;padding-bottom:6px}
+  .ln .v{font-weight:800;font-size:18px}
+  .ln.debe .v{color:var(--rojo)} .ln.favor .v{color:var(--verde)} .ln.ok .v{color:var(--verde)}
 
-  .casa-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
-  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--gris);margin-top:10px}
-  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .card{background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;padding:20px;margin-bottom:16px}
+  .card h3{font-size:19px;font-weight:800;margin-bottom:2px}
+  .card .desc{font-size:15px;color:var(--gris);margin-bottom:14px}
+  .chart-box{position:relative;height:320px}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.g2{grid-template-columns:1fr}}
 
-  footer{border-top:1px solid var(--linea);padding:20px 0 40px;color:var(--gris);font-size:11px;text-align:center}
-  .alert{background:var(--rojo-cl);border:1px solid #e8b5b4;border-radius:10px;padding:12px 16px;font-size:12px;color:#7a1413;margin-bottom:16px}
-  .ok{background:var(--verde-cl);border-color:#b3d4ba;color:var(--verde)}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th{text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--gris);
+    font-weight:800;padding:10px 12px;border-bottom:2px solid var(--linea);position:sticky;top:0;background:var(--tarjeta)}
+  td{padding:9px 12px;border-bottom:1px solid #f0ede4}
+  .money-e{color:var(--rojo);font-weight:700} .money-a{color:var(--verde);font-weight:700}
+  .tbl-scroll{max-height:560px;overflow:auto;border:1px solid var(--linea);border-radius:12px}
+  .filtros{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .filtros select,.filtros input{font-family:inherit;font-size:15px;padding:10px 12px;border:1.5px solid var(--linea);border-radius:10px;background:#fff}
 
-  .ficha{background:#fff;border:1px solid var(--linea);border-radius:12px;padding:0;margin-bottom:14px;overflow:hidden}
-  .ficha-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--linea)}
-  .ficha-head .casa-id{display:flex;align-items:center;gap:12px}
-  .ficha-head .letra{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;
-    font-weight:800;font-size:16px;color:#fff}
-  .ficha-head .nm{font-size:13px;font-weight:700}
-  .ficha-head .estado-pill{font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px}
-  .ficha-body{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
-  @media(max-width:680px){.ficha-body{grid-template-columns:1fr 1fr}}
-  .ficha-cell{padding:12px 18px;border-right:1px solid #efece3;border-bottom:1px solid #efece3}
-  .ficha-cell .l{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gris);font-weight:600}
-  .ficha-cell .v{font-size:15px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+  .aviso{border-radius:12px;padding:14px 18px;font-size:16px;margin-bottom:16px;border:1px solid}
+  .aviso-rojo{background:var(--rojo-bg);border-color:#e3b0ac;color:#7d1a14}
+  .aviso-ok{background:var(--verde-bg);border-color:#aed6ba;color:#0f5a2a}
+  .acciones{background:var(--tarjeta);border:1px solid var(--linea);border-radius:14px;padding:18px 22px;margin-top:4px}
+  .acciones .at{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--rojo);font-weight:800;margin-bottom:10px}
+  .acciones ol{margin:0;padding-left:22px}
+  .acciones li{font-size:16px;margin-bottom:9px;line-height:1.45}
 
-  .ger{background:#fff;border:1px solid var(--linea);border-radius:14px;padding:24px 26px;margin-bottom:20px;border-left:5px solid var(--verde)}
-  .ger h2{font-size:18px;font-weight:800;letter-spacing:-.01em;margin-bottom:4px}
-  .ger .ger-sub{font-size:12px;color:var(--gris);margin-bottom:18px}
-  .ger .headline{font-size:15px;font-weight:700;line-height:1.45;margin-bottom:10px}
-  .ger .headline .big{font-size:21px}
-  .ger p{font-size:13px;color:#333;line-height:1.6;margin-bottom:14px}
-  .ger .puntos{display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;margin:4px 0 4px}
-  @media(max-width:680px){.ger .puntos{grid-template-columns:1fr}}
-  .ger .pt{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;line-height:1.45}
-  .ger .pt .mk{flex-shrink:0;width:8px;height:8px;border-radius:50%;margin-top:6px}
-  .ger .acciones{margin-top:16px;padding-top:16px;border-top:1px solid var(--linea)}
-  .ger .acciones .at{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--rojo);font-weight:700;margin-bottom:10px}
-  .ger ol{margin:0;padding-left:20px}
-  .ger ol li{font-size:12.5px;color:#333;line-height:1.5;margin-bottom:6px}
-
-.segbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
-.seglbl{font-size:12px;font-weight:600;color:#6b6457;margin-right:2px}
-.seg{border:1.5px solid #cfc9bb;background:#fff;color:#444;border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer}
-.seg.on{background:#37474f;color:#fff;border-color:#37474f}
-.pie-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.pie-row .chart-box{flex:1 1 220px;min-width:180px}
-.pie-leg{flex:1 1 220px;font-size:12px}
-.pie-leg table{width:100%;border-collapse:collapse}
-.pie-leg td{padding:2px 4px;vertical-align:middle}
-.pie-leg td.v{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
-.pie-leg .dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
-
-@media print{
-  nav,.segbar{display:none!important}
-  .panel{display:block!important;page-break-inside:avoid}
-  .card{page-break-inside:avoid;box-shadow:none;border:1px solid #ddd}
-  header{background:#fff!important;color:#000!important}
-  a{text-decoration:none}
-}
-.seg:focus,nav button:focus{outline:2px solid #1565c0;outline-offset:1px}
+  footer{border-top:1px solid var(--linea);padding:20px 0 40px;color:var(--gris);font-size:13px;text-align:center}
 </style>
 </head>
 <body>
 <header><div class="wrap">
-  <div class="eyebrow">Tesorería · Banco Itaú 0205401998</div>
+  <div class="eyebrow">Tesorería · Cuenta Itaú 0205401998</div>
   <h1>Comunidad Allipen</h1>
-  <div class="sub">Registro conciliado 2025–2026 · 8 casas (A–H) · Tesorero: Franco Catinello (Casa E)</div>
-  <div class="sub" style="margin-top:4px;font-size:12px;opacity:.85">Actualizado: 24 de agosto de 2026 · Fuente: cartolas Banco Itaú 0205401998 · Cifras conciliadas al peso</div>
+  <div class="sub">Registro de ingresos y egresos, respaldado con cartolas y comprobantes · 8 casas (A–H) · Actualizado: 24 de noviembre de 2026</div>
 </div></header>
 
-<nav><div class="wrap" style="display:flex;gap:2px;flex-wrap:wrap">
+<nav><div class="wrap" style="display:flex;gap:4px">
   <button class="on" data-p="resumen">Resumen</button>
-  <button data-p="casas">Gasto Común por casa</button>
+  <button data-p="porcasa">Por casa</button>
   <button data-p="gastos">Gastos</button>
-  <button data-p="flujo">Flujo mensual</button>
-  <button data-p="oblig">Compromisos</button>
-  <button data-p="extras">Cuotas extra</button>
-  <button data-p="registro">Registro completo</button>
+  <button data-p="mes">Mes a mes</button>
+  <button data-p="fondos">Fondos</button>
+  <button data-p="compromisos">Compromisos</button>
+  <button data-p="registro">Registro</button>
 </div></nav>
 
 <div class="wrap">
 
-<!-- RESUMEN -->
-<section class="panel on" id="resumen">
-  <div id="gerencial"></div>
-  <div class="grid g4" style="margin-bottom:18px" id="kpis"></div>
-  <div class="segbar"><span class="seglbl">Ver:</span><span id="segAnioRes"></span></div>
-  <div class="grid g2">
-    <div class="card"><h3>Ingresos vs Egresos por año</h3><div class="desc">Cuotas cobradas contra gastos del condominio</div><div class="chart-box"><canvas id="cIngEgr"></canvas></div></div>
-    <div class="card"><h3>Estado de cobranza</h3><div class="desc">Cuántas casas están al día en el período elegido</div><div class="chart-box"><canvas id="cEstado"></canvas></div></div>
-  </div>
-  <div class="card"><h3>Egresos por categoría</h3><div class="desc">En qué se gasta el dinero de la comunidad</div><div class="chart-box tall"><canvas id="cEgrCat"></canvas></div></div>
-</section>
-
-<!-- CASAS (GC por casa: mensual acumulado + detalle) -->
-<section class="panel" id="casas">
-  <div class="card">
-    <h3>Pagos de Gasto Común mes a mes (acumulado)</h3>
-    <div class="desc" id="descCasa"></div>
-    <div class="segbar"><span class="seglbl">Año:</span><span id="segAnioCasa"></span></div>
-    <div class="segbar"><span class="seglbl">Casa:</span><span id="segCasa"></span></div>
-    <div class="chart-box tall"><canvas id="cCasasMes"></canvas></div>
-  </div>
-  <div id="fichas"></div>
-</section>
-
-<!-- GASTOS -->
+<section class="panel on" id="resumen"></section>
+<section class="panel" id="porcasa"></section>
 <section class="panel" id="gastos">
-  <div class="grid g2">
-    <div class="card"><h3>Egresos 2025 por categoría</h3><div class="desc">Total año completo</div><div class="pie-row"><div class="chart-box tall"><canvas id="cEgr25"></canvas></div><div class="pie-leg" id="legEgr25"></div></div></div>
-    <div class="card"><h3>Egresos 2026 por categoría</h3><div class="desc">Enero a agosto</div><div class="pie-row"><div class="chart-box tall"><canvas id="cEgr26"></canvas></div><div class="pie-leg" id="legEgr26"></div></div></div>
-  </div>
-  <div class="card"><h3>Comparación de gasto por categoría</h3><div class="desc">2025 vs 2026 lado a lado</div><div class="chart-box tall"><canvas id="cEgrComp"></canvas></div></div>
-</section>
-
-<!-- FLUJO -->
-<section class="panel" id="flujo">
-  <div class="segbar"><span class="seglbl">Año:</span><span id="segAnioFlujo"></span></div>
-  <div class="card"><h3>Flujo de caja mensual</h3><div class="desc">Ingresos (cuotas) contra egresos (gastos) cada mes</div><div class="chart-box tall"><canvas id="cFlujo"></canvas></div></div>
-  <div class="card"><h3>Saldo acumulado del año (curva S)</h3><div class="desc">Ingreso y egreso acumulados mes a mes. La brecha entre las curvas es el superávit (verde) o déficit del período.</div><div class="chart-box"><canvas id="cAcum"></canvas></div></div>
-</section>
-
-<!-- COMPROMISOS -->
-<section class="panel" id="oblig">
-  <div class="alert">El condominio recibió una <strong>caja en cero</strong> de la administración anterior, con deudas heredadas que aún están pendientes de pago.</div>
-  <div class="grid g3" id="kpiOblig"></div>
-  <div class="card"><h3>Obligaciones futuras por casa</h3><div class="desc">Lo que el condominio debe devolver a cada casa por adelantos de 2024</div><div class="chart-box"><canvas id="cOblig"></canvas></div></div>
-  <div class="card"><h3>Casa B — motor 2024 aplicado 100% a su deuda de GC</h3><div class="desc">El crédito del motor se cargó completo a las cuotas de B. A Casa B no se le debe nada; debe cuotas incompletas.</div>
-    <table><tbody id="netoB"></tbody></table>
+  <h2 class="sec">En qué se gasta la plata</h2>
+  <div class="g2">
+    <div class="card"><h3>Gastos del condominio 2026</h3><div class="desc">Enero a noviembre · sin contar los fondos</div><div class="chart-box"><canvas id="cEgr26"></canvas></div></div>
+    <div class="card"><h3>Comparación con 2025</h3><div class="desc">Gasto por categoría, año contra año</div><div class="chart-box"><canvas id="cEgrComp"></canvas></div></div>
   </div>
 </section>
-
-<!-- EXTRAS: malla y llaves -->
-<section class="panel" id="extras">
-  <div class="card"><h3>Cuota malla — cuenta separada del Gasto Común</h3>
-    <div class="desc">Cuota única extraordinaria de $20.000 por casa · presupuesto total $160.000 (8 casas). No es parte del GC ordinario.</div>
-    <div class="grid g3" id="kpiMalla" style="margin:12px 0"></div>
-    <div class="chart-box"><canvas id="cMalla"></canvas></div>
-    <div class="legend"><span><span class="dot" style="background:var(--verde)"></span>Pagó</span><span><span class="dot" style="background:var(--rojo)"></span>Pendiente</span></div>
-  </div>
-  <div class="card"><h3>Copia de llaves — mantención asociada al cambio de chapa</h3>
-    <div class="desc">Presupuesto, ingreso (reembolsos de las casas) y egreso (compra al proveedor). Cuenta cerrada en $0.</div>
-    <div class="grid g3" id="kpiLlaves" style="margin-bottom:16px"></div>
-    <div class="chart-box"><canvas id="cLlaves"></canvas></div>
-  </div>
+<section class="panel" id="mes">
+  <h2 class="sec">Mes a mes 2026</h2>
+  <div class="card"><h3>Lo que entró y lo que salió cada mes</h3><div class="desc">Barras verdes = ingresos · rojas = gastos</div><div class="chart-box"><canvas id="cFlujo"></canvas></div></div>
+  <div class="card"><h3>Cómo fue cambiando la caja</h3><div class="desc">La línea sube cuando entra más de lo que sale</div><div class="chart-box"><canvas id="cCaja"></canvas></div></div>
 </section>
-
-<!-- REGISTRO -->
+<section class="panel" id="fondos"></section>
+<section class="panel" id="compromisos"></section>
 <section class="panel" id="registro">
+  <h2 class="sec">Todos los movimientos</h2>
   <div class="filtros">
-    <select id="fAnio"><option value="">Todos los años</option><option value="2025">2025</option><option value="2026">2026</option></select>
     <select id="fCasa"><option value="">Todas las casas</option></select>
-    <select id="fGrupo"><option value="">Todos los grupos</option></select>
-    <select id="fTipo"><option value="">Ingresos y egresos</option><option value="abo">Solo ingresos</option><option value="egr">Solo egresos</option></select>
-    <input type="text" id="fTexto" placeholder="Buscar en detalle…" style="flex:1;min-width:160px">
-    <span class="count" id="fCount"></span>
+    <select id="fTipo"><option value="">Entradas y salidas</option><option value="abo">Solo entradas</option><option value="egr">Solo salidas</option></select>
+    <input id="fTexto" placeholder="Buscar…" style="flex:1;min-width:160px">
+    <span id="fCount" style="align-self:center;color:var(--gris);font-size:14px"></span>
   </div>
-  <div class="tbl-scroll">
-    <table>
-      <thead><tr><th>Fecha</th><th>Año</th><th>Casa</th><th>Grupo</th><th>Detalle</th><th style="text-align:right">Egreso</th><th style="text-align:right">Ingreso</th><th>Estado</th></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-  </div>
+  <div class="tbl-scroll"><table><thead><tr><th>Fecha</th><th>Casa</th><th>Concepto</th><th style="text-align:right">Entró</th><th style="text-align:right">Salió</th></tr></thead><tbody id="tbody"></tbody></table></div>
 </section>
 
 </div>
-
-<footer><div class="wrap">Comunidad Allipen · Reporte de tesorería conciliado con cartolas bancarias · Generado para revisión de los vecinos</div></footer>
+<footer><div class="wrap">Comunidad Allipen · Reporte de tesorería · Las cifras provienen del libro contable del condominio</div></footer>
 
 <script>
-const D = {"nombres": {"A": "Maria Jose Tobar", "B": "Augusto Quintana", "C": "Pedro Aguayo", "D": "Paula Bravo", "E": "Franco Catinello", "F": "Consuelo Natalia", "G": "Maria Margarita Gallo", "H": "Roberto Bonnefoy"}, "gc25": {"A": [65000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 0, 0], "B": [65000, 80000, 80000, 0, 0, 0, 0, 0, 0, 0, 0, 0], "C": [65000, 80000, 80000, 80000, 0, 0, 0, 400000, 0, 160000, 0, 80000], "D": [65000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000], "E": [65000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000], "F": [0, 65000, 80000, 80000, 160000, 80000, 0, 80000, 80000, 0, 0, 0], "G": [65000, 80000, 80000, 80000, 0, 80000, 160000, 80000, 80000, 80000, 80000, 80000], "H": [65000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000, 80000]}, "gc26": {"A": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "B": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 0, 0, 0, 0], "C": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 95000, 95000, 0, 0], "D": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 0, 0, 0, 0], "E": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 0, 0, 0, 0], "F": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "G": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 0, 0, 0, 0], "H": [80000.0, 80000.0, 80000.0, 90000.0, 90000.0, 90000.0, 95000, 95000, 0, 0, 0, 0]}, "malla": {"pagos": {"A": 20000.0, "B": 20000.0, "C": 20000.0, "D": 20000.0, "E": 20000.0, "F": 0, "G": 20000.0, "H": 20000.0}, "cuota": 20000, "presupuesto": 160000}, "egr25": {"CUENTAS BASICAS": 3232281.0, "INCIDENTES": 500000.0, "MANTENCION 2025": 863385.0, "MANTENCION JARDIN": 2824025.0, "AGUINALDOS ": 110000.0}, "egr26": {"COPIA LLAVES": 301392.0, "MANTENCION JARDIN": 2056425, "CUENTAS BASICAS": 2603646, "MANTENCION 2026": 360000.0, "INCIDENTES": 168000}, "flujo25": {"ing": [1290000, 1121000, 640000, 560000, 480000, 480000, 480000, 880000, 480000, 560000, 320000, 400000], "egr": [80000, 1418199, 667872, 1531929, 235000, 873626, 351788, 235000, 508637, 550000, 0, 1077640]}, "flujo26": {"ing": [240000.0, 431292.0, 1265100.0, 400000.0, 600000.0, 905000.0, 380000, 670000, 0, 0, 0, 0], "egr": [584085.0, 1215689.0, 873210.0, 470000.0, 811579.0, 235000.0, 662814, 637086, 0, 0, 0, 0]}, "kpi": {"ing25": 7691000, "egr25": 7529691, "ing26": 4891392, "egr26": 5489463, "caja": -436762, "oblig_fut": 1391895}, "estado26": {"A": {"pagado": 0, "pagado_total": 0, "presup": 700000, "saldo": -700000, "adelanto": 0}, "B": {"pagado": 700000, "pagado_total": 700000, "presup": 700000, "saldo": 0, "adelanto": 0}, "C": {"pagado": 700000, "pagado_total": 890000, "presup": 700000, "saldo": 0, "adelanto": 190000}, "D": {"pagado": 700000.0, "pagado_total": 700000.0, "presup": 700000, "saldo": 0.0, "adelanto": 0}, "E": {"pagado": 700000.0, "pagado_total": 700000.0, "presup": 700000, "saldo": 0.0, "adelanto": 0}, "F": {"pagado": 0, "pagado_total": 0, "presup": 700000, "saldo": -700000, "adelanto": 0}, "G": {"pagado": 700000.0, "pagado_total": 700000.0, "presup": 700000, "saldo": 0.0, "adelanto": 0}, "H": {"pagado": 700000.0, "pagado_total": 700000.0, "presup": 700000, "saldo": 0.0, "adelanto": 0}}, "estado25": {"A": {"pagado": 785000, "presup": 945000, "saldo": -160000}, "B": {"pagado": 225000, "presup": 945000, "saldo": -720000}, "C": {"pagado": 945000, "presup": 945000, "saldo": 0}, "D": {"pagado": 945000, "presup": 945000, "saldo": 0}, "E": {"pagado": 945000, "presup": 945000, "saldo": 0}, "F": {"pagado": 625000, "presup": 945000, "saldo": -320000}, "G": {"pagado": 945000, "presup": 945000, "saldo": 0}, "H": {"pagado": 945000, "presup": 945000, "saldo": 0}}, "oblig_fut": {"B": 666895, "E": 585000, "H": 140000}, "neteo_B": {"deuda_gc25": 720000, "adelanto_gc26": 70000, "credito_motor": 666895, "neto": 16895, "a_favor": true}, "llaves": {"presupuesto": 301392, "ingreso": 301392, "egreso": 301392, "reembolsos": {"A": 23400, "B": 58500, "C": 58000, "D": 46800, "E": 44492, "G": 23400, "H": 46800}, "chapa": 160000}, "movs": [{"fecha": "2025-01-21", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2024", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-23", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2024", "egr": 0, "abo": 325000, "status": "C"}, {"fecha": "2025-02-12", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 637140, "abo": 0, "status": "C"}, {"fecha": "2025-02-12", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 46059, "abo": 0, "status": "C"}, {"fecha": "2025-03-04", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 347550, "abo": 0, "status": "C"}, {"fecha": "2025-03-04", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 24297, "abo": 0, "status": "C"}, {"fecha": "2025-04-08", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 462650, "abo": 0, "status": "C"}, {"fecha": "2025-04-08", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 20894, "abo": 0, "status": "C"}, {"fecha": "2025-06-02", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 574130, "abo": 0, "status": "C"}, {"fecha": "2025-06-02", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 64496, "abo": 0, "status": "C"}, {"fecha": "2025-07-10", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 2190, "abo": 0, "status": "C"}, {"fecha": "2025-07-10", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 30677, "abo": 0, "status": "C"}, {"fecha": "2025-07-28", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 33921, "abo": 0, "status": "C"}, {"fecha": "2025-09-22", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 160150, "abo": 0, "status": "C"}, {"fecha": "2025-09-22", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 33487, "abo": 0, "status": "C"}, {"fecha": "2025-12-18", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "AGUA", "egr": 701160, "abo": 0, "status": "C"}, {"fecha": "2025-12-18", "anio": 2025, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "LUZ", "egr": 93480, "abo": 0, "status": "C"}, {"fecha": "2025-01-01", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025 (cuadre, no afecta caja)", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-01", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025 (cuadre, no afecta caja)", "egr": 65000, "abo": 0, "status": "C"}, {"fecha": "2025-01-21", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-23", "anio": 2025, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-22", "anio": 2025, "uni": "D", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-02-05", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 15000, "status": "C"}, {"fecha": "2025-02-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-02-06", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-06", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-02-07", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-12", "anio": 2025, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-05", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 65000, "status": "C"}, {"fecha": "2025-02-18", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-20", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 15000, "status": "C"}, {"fecha": "2025-03-04", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-05", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-05", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-06", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-10", "anio": 2025, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-24", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-02", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-03-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-04", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-07", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-08", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-08", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-16", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-05", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-04-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-06", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-14", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-22", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-05-05", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-04", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-09", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-10", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-30", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-02", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-02", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-06-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-07", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-08", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-24", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-07-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-04", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-06", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-07", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 400000, "status": "C"}, {"fecha": "2025-08-07", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-11", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-01", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-08-04", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-08", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-16", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-29", "anio": 2025, "uni": "F", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-10-02", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-09-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-10-06", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-10-09", "anio": 2025, "uni": "A", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-10-24", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 160000, "status": "C"}, {"fecha": "2025-10-27", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-10-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-11-04", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-11-05", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-11-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-11-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-12-05", "anio": 2025, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-12-12", "anio": 2025, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-12-15", "anio": 2025, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-12-18", "anio": 2025, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-12-03", "anio": 2025, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GASTO COMUN 2025", "egr": 0, "abo": 80000, "status": "C"}, {"fecha": "2025-02-06", "anio": 2025, "uni": "COND", "grupo": "INCIDENTES", "detalle": "CAMBIO MOTOR", "egr": 200000, "abo": 0, "status": "C"}, {"fecha": "2025-02-10", "anio": 2025, "uni": "C", "grupo": "INCIDENTES", "detalle": "CAMBIO MOTOR", "egr": 0, "abo": 350000, "status": "C"}, {"fecha": "2025-02-10", "anio": 2025, "uni": "COND", "grupo": "INCIDENTES", "detalle": "CAMBIO MOTOR", "egr": 150000, "abo": 0, "status": "C"}, {"fecha": "2025-02-19", "anio": 2025, "uni": "COND", "grupo": "INCIDENTES", "detalle": "CAMBIO PILAR PORTON", "egr": 150000, "abo": 0, "status": "C"}, {"fecha": "2025-01-21", "anio": 2025, "uni": "A", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-01-21", "anio": 2025, "uni": "C", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 74000, "status": "C"}, {"fecha": "2025-01-21", "anio": 2025, "uni": "H", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-01-23", "anio": 2025, "uni": "B", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "E", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-02-06", "anio": 2025, "uni": "F", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-02-25", "anio": 2025, "uni": "G", "grupo": "MANTENCION 2024", "detalle": "DEVOLUCION A CASA E", "egr": 0, "abo": 73000, "status": "C"}, {"fecha": "2025-01-27", "anio": 2025, "uni": "C", "grupo": "MANTENCION 2024", "detalle": "CUOTA ADICIONAL", "egr": 0, "abo": 71000, "status": "C"}, {"fecha": "2025-04-14", "anio": 2025, "uni": "COND", "grupo": "MANTENCION 2025", "detalle": "LUCES", "egr": 173385, "abo": 0, "status": "C"}, {"fecha": "2025-04-14", "anio": 2025, "uni": "COND", "grupo": "MANTENCION 2025", "detalle": "MANTENCION ELECTRICA", "egr": 300000, "abo": 0, "status": "C"}, {"fecha": "2025-04-17", "anio": 2025, "uni": "COND", "grupo": "MANTENCION 2025", "detalle": "MANTENCION ELECTRICA", "egr": 340000, "abo": 0, "status": "C"}, {"fecha": "2025-07-28", "anio": 2025, "uni": "COND", "grupo": "MANTENCION 2025", "detalle": "MANTENCION MOTOR", "egr": 50000, "abo": 0, "status": "C"}, {"fecha": "2025-01-31", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "FUMIGACION", "egr": 80000, "abo": 0, "status": "C"}, {"fecha": "2025-02-03", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-03-03", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-03-21", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "RETIRO RAMAS", "egr": 11025, "abo": 0, "status": "C"}, {"fecha": "2025-03-24", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "PODA ARBOL", "egr": 50000, "abo": 0, "status": "C"}, {"fecha": "2025-04-01", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-05-02", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-06-02", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-07-01", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-08-01", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-09-01", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-09-13", "anio": 2025, "uni": "COND", "grupo": "AGUINALDOS", "detalle": "AGUINALDOS 2025", "egr": 40000, "abo": 0, "status": "C"}, {"fecha": "2025-09-22", "anio": 2025, "uni": "COND", "grupo": "AGUINALDOS", "detalle": "AGUINALDOS 2025", "egr": 40000, "abo": 0, "status": "C"}, {"fecha": "2025-10-02", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-10-30", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "FUMIGACION", "egr": 80000, "abo": 0, "status": "C"}, {"fecha": "2025-10-30", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-12-01", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "JARDINERO", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2025-12-18", "anio": 2025, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "CAMBIO REGADOR", "egr": 18000, "abo": 0, "status": "C"}, {"fecha": "2025-12-23", "anio": 2025, "uni": "COND", "grupo": "AGUINALDOS", "detalle": "AGUINALDOS 2025", "egr": 30000, "abo": 0, "status": "C"}, {"fecha": "2026-03-31", "anio": 2026, "uni": "A", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 23400.0, "status": "C"}, {"fecha": "2026-04-23", "anio": 2026, "uni": "A", "grupo": "INCIDENTES", "detalle": "Cuota malla", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-03-04", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (de pago $400k 04/03)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-04", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (de pago $400k 04/03)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-04", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-03 (de pago $400k 04/03)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-04", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (de pago $400k 04/03)", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-03-04", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (de pago $400k 04/03)", "egr": 0, "abo": 70000.0, "status": "C"}, {"fecha": "2026-06-15", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (resto, pago $200k)", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-06-15", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (de pago $200k)", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-06-15", "anio": 2026, "uni": "B", "grupo": "INCIDENTES", "detalle": "Cuota malla (de pago $200k)", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-06-15", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 adelanto (de pago $200k)", "egr": 0, "abo": 70000.0, "status": "C"}, {"fecha": "2026-03-06", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-06", "anio": 2026, "uni": "C", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 58000.0, "status": "C"}, {"fecha": "2026-03-19", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-19", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-19", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (abono parcial)", "egr": 0, "abo": 10000.0, "status": "C"}, {"fecha": "2026-03-19", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (completa, op 5k)", "egr": 0, "abo": 5000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (resto)", "egr": 0, "abo": 75000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "C", "grupo": "INCIDENTES", "detalle": "Cuota malla", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (abono parcial)", "egr": 0, "abo": 15000.0, "status": "C"}, {"fecha": "2026-02-12", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (de pago $160k)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-02-12", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (de pago $160k)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "D", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 46800.0, "status": "C"}, {"fecha": "2026-03-06", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-04-01", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "D", "grupo": "INCIDENTES", "detalle": "Cuota malla", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-06-03", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-01-27", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "G", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 23400.0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-06", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-04-14", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-27", "anio": 2026, "uni": "G", "grupo": "INCIDENTES", "detalle": "Cuota malla", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-06-02", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-01-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-02-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-02-27", "anio": 2026, "uni": "H", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 46800.0, "status": "C"}, {"fecha": "2026-03-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-04-06", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-04-20", "anio": 2026, "uni": "H", "grupo": "INCIDENTES", "detalle": "Cuota malla", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-06-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-03-03", "anio": 2026, "uni": "B", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves (recibido en otra cuenta)", "egr": 0, "abo": 58500.0, "status": "C"}, {"fecha": "2026-01-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (automático)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-02-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (automático)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-03-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-03 (automático)", "egr": 0, "abo": 80000.0, "status": "C"}, {"fecha": "2026-04-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (automático)", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-05-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (automático)", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-06-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (automático)", "egr": 0, "abo": 90000.0, "status": "C"}, {"fecha": "2026-02-01", "anio": 2026, "uni": "E", "grupo": "INCIDENTES", "detalle": "Cuota malla (automática)", "egr": 0, "abo": 20000.0, "status": "C"}, {"fecha": "2026-02-26", "anio": 2026, "uni": "E", "grupo": "COPIA LLAVES", "detalle": "Compra copias llaves Multiservice (pagó Casa E)", "egr": 301392.0, "abo": 0, "status": "C"}, {"fecha": "2026-02-26", "anio": 2026, "uni": "E", "grupo": "COPIA LLAVES", "detalle": "Aporte Casa E por sus copias (automático, cierra cuenta)", "egr": 0, "abo": 44492.0, "status": "C"}, {"fecha": "2026-01-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-01-02", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 322330.0, "abo": 0, "status": "C"}, {"fecha": "2026-01-02", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 26755.0, "abo": 0, "status": "C"}, {"fecha": "2026-02-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-02-18", "anio": 2026, "uni": "COND", "grupo": "MANTENCION 2026", "detalle": "Mantención cerco", "egr": 200000.0, "abo": 0, "status": "C"}, {"fecha": "2026-02-18", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 452240.0, "abo": 0, "status": "C"}, {"fecha": "2026-02-18", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 27057.0, "abo": 0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Fumigación", "egr": 80000.0, "abo": 0, "status": "C"}, {"fecha": "2026-03-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Reparación riegos", "egr": 36000.0, "abo": 0, "status": "C"}, {"fecha": "2026-03-24", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 362210.0, "abo": 0, "status": "C"}, {"fecha": "2026-03-24", "anio": 2026, "uni": "COND", "grupo": "MANTENCION 2026", "detalle": "Cambio de chapa", "egr": 160000.0, "abo": 0, "status": "C"}, {"fecha": "2026-04-01", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-04-30", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 727290.0, "abo": 0, "status": "C"}, {"fecha": "2026-05-05", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 84289.0, "abo": 0, "status": "C"}, {"fecha": "2026-06-01", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000.0, "abo": 0, "status": "C"}, {"fecha": "2026-07-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (automático)", "egr": 0, "abo": 90000, "status": "C"}, {"fecha": "2026-07-02", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2026-07-02", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 372900, "abo": 0, "status": "C"}, {"fecha": "2026-07-02", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 54914, "abo": 0, "status": "C"}, {"fecha": "2026-07-02", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-07-02", "anio": 2026, "uni": "COND", "grupo": "INCIDENTES", "detalle": "Transferencia a Luis ANULADA (devuelta en efectivo, compra sin registro)", "egr": 0, "abo": 0, "status": "C"}, {"fecha": "2026-07-06", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-07-06", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-01", "anio": 2026, "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (automático)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-03", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0, "status": "C"}, {"fecha": "2026-08-03", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Corte del álamo (Luis Arenas)", "egr": 40000, "abo": 0, "status": "C"}, {"fecha": "2026-08-04", "anio": 2026, "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-08", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-05", "anio": 2026, "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-08", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-05", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (parte transferida $74.575)", "egr": 0, "abo": 74575, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 142150, "abo": 0, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 31511, "abo": 0, "status": "C"}, {"fecha": "2026-08-05", "anio": 2026, "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (crédito: Casa D pagó retiro ramas municipal)", "egr": 0, "abo": 20425, "status": "C"}, {"fecha": "2026-08-05", "anio": 2026, "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Retiro ramas y escombros - Municipalidad La Reina (pagó Casa D)", "egr": 20425, "abo": 0, "status": "C"}, {"fecha": "2026-08-11", "anio": 2026, "uni": "E", "grupo": "INCIDENTES", "detalle": "Compra malla sombra 4x5 (cambio de malla, pagó Casa E; falta instalación)", "egr": 168000, "abo": 0, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 (completa · de pago $110.000)", "egr": 0, "abo": 15000, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-10 (adelantado · de pago $110.000)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 resto (de pago $180.000)", "egr": 0, "abo": 25000, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (de pago $180.000)", "egr": 0, "abo": 95000, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2025 dic resto (arrastre · de pago $180.000)", "egr": 0, "abo": 53105, "status": "C"}, {"fecha": "2026-08-24", "anio": 2026, "uni": "B", "grupo": "GASTO COMUN", "detalle": "Sobrepago $6.895 a favor de Casa B", "egr": 0, "abo": 6895, "status": "C"}], "reporte_casa": {"A": {"nombre": "Maria Jose Tobar", "pag25": 785000, "presu25": 945000, "deuda25": 160000, "pag26": 0, "presu26": 700000, "deuda26": 700000, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 0, "arrastre24": 0, "debe_total": 860000, "favor_total": 0, "neto": -860000}, "B": {"nombre": "Augusto Quintana", "pag25": 225000, "presu25": 945000, "deuda25": 0, "pag26": 700000, "presu26": 700000, "deuda26": 0, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 6895, "arrastre24": 0, "debe_total": 0, "favor_total": 6895, "neto": 6895}, "C": {"nombre": "Pedro Aguayo", "pag25": 945000, "presu25": 945000, "deuda25": 0, "pag26": 890000, "presu26": 700000, "deuda26": 0, "adelanto26": 190000, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 0, "arrastre24": 0, "debe_total": 0, "favor_total": 190000, "neto": 190000}, "D": {"nombre": "Paula Bravo", "pag25": 945000, "presu25": 945000, "deuda25": 0, "pag26": 700000.0, "presu26": 700000, "deuda26": 0, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 0, "arrastre24": 0, "debe_total": 0, "favor_total": 0, "neto": 0}, "E": {"nombre": "Franco Catinello", "pag25": 945000, "presu25": 945000, "deuda25": 0, "pag26": 700000.0, "presu26": 700000, "deuda26": 0, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 585000, "arrastre24": 0, "debe_total": 0, "favor_total": 585000, "neto": 585000}, "F": {"nombre": "Consuelo Natalia", "pag25": 625000, "presu25": 945000, "deuda25": 320000, "pag26": 0, "presu26": 700000, "deuda26": 700000, "adelanto26": 0, "malla_pag": 0, "malla_deuda": 20000, "le_deben": 0, "arrastre24": 0, "debe_total": 1040000, "favor_total": 0, "neto": -1040000}, "G": {"nombre": "Maria Margarita Gallo", "pag25": 945000, "presu25": 945000, "deuda25": 0, "pag26": 700000.0, "presu26": 700000, "deuda26": 0, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 0, "arrastre24": 0, "debe_total": 0, "favor_total": 0, "neto": 0}, "H": {"nombre": "Roberto Bonnefoy", "pag25": 945000, "presu25": 945000, "deuda25": 0, "pag26": 700000.0, "presu26": 700000, "deuda26": 0, "adelanto26": 0, "malla_pag": 20000.0, "malla_deuda": 0, "le_deben": 140000, "arrastre24": 0, "debe_total": 0, "favor_total": 140000, "neto": 140000}}, "proyeccion": {"egr_2025_total": 7529691, "prom_mensual_2025": 627474, "gasto_cat_2025": {"CUENTAS BASICAS": 3232281, "MANTENCION JARDIN": 2824025, "MANTENCION": 863385, "INCIDENTES": 500000, "AGUINALDOS": 110000}, "ing_esperado_2026": 7680000, "egr_referencia_2026": 7529691, "ing_real_jun26": 3496392.0, "egr_real_jun26": 4189563.0}, "deuda_condominio": {"E": 585000, "H": 140000, "B": 6895}};
+const D = {"caja_total": 833115, "result_op_2026": -235194, "caja_op": -73885, "fondos_total": 907000, "reserva": {"rec": 995000, "sal": 995000}, "malla": {"rec": 140000, "gas": 228000, "sal": -88000}, "por_cobrar": 3010000, "si_cobra_todo": 3106220, "deuda_casas": 736895, "deuda_det": {"B": 6895, "E": 585000, "H": 145000}, "posicion_total": 96220, "ing25": 7756000, "egr25": 7594691, "result25": 161309, "ing_op26": 6331392, "egr_op26": 6566586, "ing_tot26": 7666392, "egr_tot26": 6994586, "flujo": [{"ing": 240000, "egr": 584085, "caja": -182776}, {"ing": 431292, "egr": 1215689, "caja": -967173}, {"ing": 1265100, "egr": 873210, "caja": -575283}, {"ing": 400000, "egr": 470000, "caja": -645283}, {"ing": 600000, "egr": 811579, "caja": -856862}, {"ing": 905000, "egr": 235000, "caja": -186862}, {"ing": 580000, "egr": 862814, "caja": -469676}, {"ing": 670000, "egr": 637086, "caja": -436762}, {"ing": 925000, "egr": 342000, "caja": 146238}, {"ing": 1030000, "egr": 604156, "caja": 572082}, {"ing": 620000, "egr": 358967, "caja": 833115}, {"ing": 0, "egr": 0, "caja": 833115}], "egr_op_cat": {"AGUINALDOS": 30000, "COPIA LLAVES": 301392, "CUENTAS BASICAS": 3016769, "MANTENCION 2026": 377000, "MANTENCION JARDIN": 2841425}, "egr25_cat": {"AGUINALDOS": 110000, "CUENTAS BASICAS": 3232281, "GASTO COMUN": 65000, "INCIDENTES": 500000, "MANTENCION 2025": 863385, "MANTENCION JARDIN": 2824025}, "casas": {"A": {"nombre": "Maria Jose Tobar", "deuda_gc26": 1015000, "deuda_gc25": 160000, "deuda_fondo": 150000, "deuda_malla": 0, "a_favor": 0, "deuda_total": 1325000, "estado": "MOROSO", "avance": 0.0, "fondo_pag": 0}, "B": {"nombre": "Augusto Quintana", "deuda_gc26": 105000, "deuda_gc25": 0, "deuda_fondo": 50000, "deuda_malla": 0, "a_favor": 6895, "deuda_total": 155000, "estado": "ATRASO", "avance": 0.896551724137931, "fondo_pag": 100000}, "C": {"nombre": "Pedro Aguayo", "deuda_gc26": 20000, "deuda_gc25": 0, "deuda_fondo": 0, "deuda_malla": 0, "a_favor": 0, "deuda_total": 20000, "estado": "CASI AL DÍA", "avance": 0.9802955665024631, "fondo_pag": 200000}, "D": {"nombre": "Paula Bravo", "deuda_gc26": 0, "deuda_gc25": 0, "deuda_fondo": 5000, "deuda_malla": 0, "a_favor": 0, "deuda_total": 5000, "estado": "CASI AL DÍA", "avance": 1.0, "fondo_pag": 145000}, "E": {"nombre": "Franco Catinello", "deuda_gc26": 0, "deuda_gc25": 0, "deuda_fondo": 0, "deuda_malla": 0, "a_favor": 585000, "deuda_total": 0, "estado": "AL DÍA", "avance": 1.0, "fondo_pag": 200000}, "F": {"nombre": "Consuelo Natalia", "deuda_gc26": 1015000, "deuda_gc25": 320000, "deuda_fondo": 150000, "deuda_malla": 20000, "a_favor": 0, "deuda_total": 1505000, "estado": "MOROSO", "avance": 0.0, "fondo_pag": 0}, "G": {"nombre": "Maria Margarita Gallo", "deuda_gc26": 0, "deuda_gc25": 0, "deuda_fondo": 0, "deuda_malla": 0, "a_favor": 0, "deuda_total": 0, "estado": "AL DÍA", "avance": 1.0, "fondo_pag": 150000}, "H": {"nombre": "Roberto Bonnefoy", "deuda_gc26": 0, "deuda_gc25": 0, "deuda_fondo": 0, "deuda_malla": 0, "a_favor": 145000, "deuda_total": 0, "estado": "AL DÍA", "avance": 1.0, "fondo_pag": 200000}}, "movs": [{"fecha": "2026-01-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (automático)", "egr": 0, "abo": 80000}, {"fecha": "2026-01-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-01-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 322330, "abo": 0}, {"fecha": "2026-01-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 26755, "abo": 0}, {"fecha": "2026-01-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000}, {"fecha": "2026-01-27", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000}, {"fecha": "2026-02-01", "uni": "E", "grupo": "FONDO MALLA", "detalle": "Cuota malla (automática)", "egr": 0, "abo": 20000}, {"fecha": "2026-02-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-02-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000}, {"fecha": "2026-02-06", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (transferencia Franco Lionel, op. 537154743)", "egr": 0, "abo": 80000}, {"fecha": "2026-02-12", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (de pago $160k)", "egr": 0, "abo": 80000}, {"fecha": "2026-02-12", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (de pago $160k)", "egr": 0, "abo": 80000}, {"fecha": "2026-02-18", "uni": "COND", "grupo": "MANTENCION 2026", "detalle": "Mantención cerco", "egr": 200000, "abo": 0}, {"fecha": "2026-02-18", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 452240, "abo": 0}, {"fecha": "2026-02-18", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 27057, "abo": 0}, {"fecha": "2026-02-26", "uni": "E", "grupo": "COPIA LLAVES", "detalle": "Compra copias llaves Multiservice (pagó Casa E)", "egr": 301392, "abo": 0}, {"fecha": "2026-02-26", "uni": "E", "grupo": "COPIA LLAVES", "detalle": "Aporte Casa E por sus copias (automático, cierra cuenta)", "egr": 0, "abo": 44492}, {"fecha": "2026-02-27", "uni": "H", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 46800}, {"fecha": "2026-03-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-03 (automático)", "egr": 0, "abo": 80000}, {"fecha": "2026-03-02", "uni": "D", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 46800}, {"fecha": "2026-03-02", "uni": "G", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 23400}, {"fecha": "2026-03-02", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000}, {"fecha": "2026-03-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-03-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Fumigación", "egr": 80000, "abo": 0}, {"fecha": "2026-03-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Reparación riegos", "egr": 36000, "abo": 0}, {"fecha": "2026-03-03", "uni": "B", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves (recibido en otra cuenta)", "egr": 0, "abo": 58500}, {"fecha": "2026-03-04", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-01 (de pago $400k 04/03)", "egr": 0, "abo": 80000}, {"fecha": "2026-03-04", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-02 (de pago $400k 04/03)", "egr": 0, "abo": 80000}, {"fecha": "2026-03-04", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-03 (de pago $400k 04/03)", "egr": 0, "abo": 80000}, {"fecha": "2026-03-04", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (de pago $400k 04/03)", "egr": 0, "abo": 90000}, {"fecha": "2026-03-04", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (de pago $400k 04/03)", "egr": 0, "abo": 70000}, {"fecha": "2026-03-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000}, {"fecha": "2026-03-06", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000}, {"fecha": "2026-03-06", "uni": "C", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 58000}, {"fecha": "2026-03-06", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000}, {"fecha": "2026-03-06", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-03", "egr": 0, "abo": 80000}, {"fecha": "2026-03-19", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-01", "egr": 0, "abo": 80000}, {"fecha": "2026-03-19", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-02", "egr": 0, "abo": 80000}, {"fecha": "2026-03-19", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (abono parcial)", "egr": 0, "abo": 10000}, {"fecha": "2026-03-19", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (completa, op 5k)", "egr": 0, "abo": 5000}, {"fecha": "2026-03-24", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 362210, "abo": 0}, {"fecha": "2026-03-24", "uni": "COND", "grupo": "MANTENCION 2026", "detalle": "Cambio de chapa", "egr": 160000, "abo": 0}, {"fecha": "2026-03-31", "uni": "A", "grupo": "COPIA LLAVES", "detalle": "Reembolso copia llaves", "egr": 0, "abo": 23400}, {"fecha": "2026-04-01", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000}, {"fecha": "2026-04-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (automático)", "egr": 0, "abo": 90000}, {"fecha": "2026-04-01", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-04-06", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000}, {"fecha": "2026-04-14", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-04", "egr": 0, "abo": 90000}, {"fecha": "2026-04-20", "uni": "H", "grupo": "FONDO MALLA", "detalle": "Cuota malla", "egr": 0, "abo": 20000}, {"fecha": "2026-04-23", "uni": "A", "grupo": "FONDO MALLA", "detalle": "Cuota malla", "egr": 0, "abo": 20000}, {"fecha": "2026-04-30", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-05-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (automático)", "egr": 0, "abo": 90000}, {"fecha": "2026-05-05", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-04 (resto)", "egr": 0, "abo": 75000}, {"fecha": "2026-05-05", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000}, {"fecha": "2026-05-05", "uni": "C", "grupo": "FONDO MALLA", "detalle": "Cuota malla", "egr": 0, "abo": 20000}, {"fecha": "2026-05-05", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (abono parcial)", "egr": 0, "abo": 15000}, {"fecha": "2026-05-05", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000}, {"fecha": "2026-05-05", "uni": "D", "grupo": "FONDO MALLA", "detalle": "Cuota malla", "egr": 0, "abo": 20000}, {"fecha": "2026-05-05", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000}, {"fecha": "2026-05-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-05", "egr": 0, "abo": 90000}, {"fecha": "2026-05-05", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 727290, "abo": 0}, {"fecha": "2026-05-05", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 84289, "abo": 0}, {"fecha": "2026-05-27", "uni": "G", "grupo": "FONDO MALLA", "detalle": "Cuota malla", "egr": 0, "abo": 20000}, {"fecha": "2026-06-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (automático)", "egr": 0, "abo": 90000}, {"fecha": "2026-06-01", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-06-02", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000}, {"fecha": "2026-06-03", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000}, {"fecha": "2026-06-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-06", "egr": 0, "abo": 90000}, {"fecha": "2026-06-15", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-05 (resto, pago $200k)", "egr": 0, "abo": 20000}, {"fecha": "2026-06-15", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (de pago $200k)", "egr": 0, "abo": 90000}, {"fecha": "2026-06-15", "uni": "B", "grupo": "FONDO MALLA", "detalle": "Cuota malla (de pago $200k)", "egr": 0, "abo": 20000}, {"fecha": "2026-06-15", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 adelanto (de pago $200k)", "egr": 0, "abo": 70000}, {"fecha": "2026-06-16", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-06 (completa, deuda $75k)", "egr": 0, "abo": 75000}, {"fecha": "2026-06-16", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (adelantado)", "egr": 0, "abo": 95000}, {"fecha": "2026-06-16", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (adelantado)", "egr": 0, "abo": 95000}, {"fecha": "2026-06-16", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 (adelantado, parcial $80k)", "egr": 0, "abo": 80000}, {"fecha": "2026-07-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (automático)", "egr": 0, "abo": 95000}, {"fecha": "2026-07-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-07-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 372900, "abo": 0}, {"fecha": "2026-07-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 54914, "abo": 0}, {"fecha": "2026-07-02", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-07-02", "uni": "COND", "grupo": "FONDO MALLA", "detalle": "Giro a Luis $200.000 (cartola op. 577808007). Luis devolvió el dinero a Eugenio y este lo entregó en efectivo a Casa E para comprar la malla. Se anula con la devolución en efectivo de la fila siguiente.", "egr": 200000, "abo": 0}, {"fecha": "2026-07-02", "uni": "COND", "grupo": "FONDO MALLA", "detalle": "Devolución en efectivo de los $200.000 girados a Luis (vía Eugenio → Casa E). Anula el efecto del giro del 02/07. Con ese efectivo se compró la malla ($168.000, 11/08); los $32.000 restantes quedan en la caja.", "egr": 0, "abo": 200000}, {"fecha": "2026-07-06", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-07-06", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 (pago $95.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-08-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (automático)", "egr": 0, "abo": 95000}, {"fecha": "2026-08-03", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-08-03", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Corte del álamo (Luis Arenas)", "egr": 40000, "abo": 0}, {"fecha": "2026-08-04", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-08", "egr": 0, "abo": 95000}, {"fecha": "2026-08-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-08", "egr": 0, "abo": 95000}, {"fecha": "2026-08-05", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (parte transferida $74.575)", "egr": 0, "abo": 74575}, {"fecha": "2026-08-05", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (crédito: Casa D pagó retiro ramas municipal)", "egr": 0, "abo": 20425}, {"fecha": "2026-08-05", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Municipalidad La Reina (pagó Casa D, orden 969129)", "egr": 20425, "abo": 0}, {"fecha": "2026-08-11", "uni": "E", "grupo": "FONDO MALLA", "detalle": "Cambio de malla, material (pagó Casa E con el efectivo devuelto del giro a Luis). Instalada 17/09 por Luis Arenas ($60.000).", "egr": 168000, "abo": 0}, {"fecha": "2026-08-24", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 142150, "abo": 0}, {"fecha": "2026-08-24", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 31511, "abo": 0}, {"fecha": "2026-08-24", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 (completa · de pago $110.000)", "egr": 0, "abo": 15000}, {"fecha": "2026-08-24", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-10 (adelantado · de pago $110.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-08-24", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-07 resto (de pago $180.000)", "egr": 0, "abo": 25000}, {"fecha": "2026-08-24", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-08 (de pago $180.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-08-24", "uni": "B", "grupo": "GASTO COMUN", "detalle": "Paga saldo GC 2025 dic (arrastre · de pago $180.000)", "egr": 0, "abo": 53105}, {"fecha": "2026-08-24", "uni": "B", "grupo": "GASTO COMUN", "detalle": "Excedente $6.895 del pago de $180.000 del 24/08/2026. Queda como saldo a favor de Casa B (cuenta por pagar del condominio), no se abona al GC.", "egr": 0, "abo": 6895}, {"fecha": "2026-09-01", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-09-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 (automático)", "egr": 0, "abo": 105000}, {"fecha": "2026-09-01", "uni": "E", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva 1/4 (automático)", "egr": 0, "abo": 50000}, {"fecha": "2026-09-02", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-09", "egr": 0, "abo": 105000}, {"fecha": "2026-09-02", "uni": "D", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva — cuota sep PARCIAL: $45.000 de $50.000 (pendiente $5.000). Transferencia $150.000 = GC sep $105.000 + $45.000", "egr": 0, "abo": 45000}, {"fecha": "2026-09-07", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 (parte $95.000)", "egr": 0, "abo": 95000}, {"fecha": "2026-09-07", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 resto $10.000 (de transferencia $15.000 del 07/09; $5.000 restantes abonados a GC diciembre)", "egr": 0, "abo": 10000}, {"fecha": "2026-09-07", "uni": "H", "grupo": "GASTO COMUN", "detalle": "Excedente $5.000 de la transferencia de $15.000 del 07/09/2026. Queda como saldo a favor de Casa H (cuenta por pagar del condominio), no se abona al GC.", "egr": 0, "abo": 5000}, {"fecha": "2026-09-10", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-09", "egr": 0, "abo": 105000}, {"fecha": "2026-09-10", "uni": "G", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva", "egr": 0, "abo": 50000}, {"fecha": "2026-09-11", "uni": "H", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva (completa)", "egr": 0, "abo": 200000}, {"fecha": "2026-09-17", "uni": "COND", "grupo": "AGUINALDOS", "detalle": "Aguinaldo Luis Arenas $30.000 (de transferencia $90.000 del 17/09, op. 600077961)", "egr": 30000, "abo": 0}, {"fecha": "2026-09-17", "uni": "COND", "grupo": "FONDO MALLA", "detalle": "Instalación malla sombra $60.000 (de transferencia $90.000 del 17/09, op. 600077961)", "egr": 60000, "abo": 0}, {"fecha": "2026-09-17", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 · Recibido en cuenta Banco de Chile 10108509 de Franco Catinello (no en cta. Itaú del condominio). Comprobante Itaú 17/09/2026 21:03, Carmen Manosalva, $155.000, 'Gastos comunes y cuota extraordinaria' = Casa B. Traspasado a la cta. Itaú del condominio el 24/11/2026 23:46 (TEFMBCO2611242346126756596490, $155.000).", "egr": 0, "abo": 105000}, {"fecha": "2026-09-17", "uni": "B", "grupo": "FONDO RESERVA", "detalle": "Cuota extra 1/4 · Recibido en cuenta Banco de Chile 10108509 de Franco Catinello (no en cta. Itaú del condominio). Comprobante Itaú 17/09/2026 21:03, Carmen Manosalva, $155.000, 'Gastos comunes y cuota extraordinaria' = Casa B. Traspasado a la cta. Itaú del condominio el 24/11/2026 23:46 (TEFMBCO2611242346126756596490, $155.000).", "egr": 0, "abo": 50000}, {"fecha": "2026-09-28", "uni": "COND", "grupo": "MANTENCION 2026", "detalle": "Farol de reposición del condominio. Boleta Lámparas Maggy SpA 28/09/2026, $17.000, pagada con tarjeta de crédito ****4043 de Casa E.", "egr": 17000, "abo": 0}, {"fecha": "2026-10-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-10 (automático)", "egr": 0, "abo": 105000}, {"fecha": "2026-10-01", "uni": "E", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva 2/4 (automático)", "egr": 0, "abo": 50000}, {"fecha": "2026-10-02", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-10-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Agua", "egr": 318900, "abo": 0}, {"fecha": "2026-10-02", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Luz", "egr": 50256, "abo": 0}, {"fecha": "2026-10-05", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-10", "egr": 0, "abo": 105000}, {"fecha": "2026-10-05", "uni": "D", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva", "egr": 0, "abo": 50000}, {"fecha": "2026-10-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-10", "egr": 0, "abo": 105000}, {"fecha": "2026-10-06", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-10", "egr": 0, "abo": 105000}, {"fecha": "2026-10-06", "uni": "G", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva", "egr": 0, "abo": 50000}, {"fecha": "2026-10-22", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-09 resto $10.000 (de pago $305.000 del 21/10, op. 609801686)", "egr": 0, "abo": 10000}, {"fecha": "2026-10-22", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-10 resto $10.000 (de pago $305.000 del 21/10, op. 609801686)", "egr": 0, "abo": 10000}, {"fecha": "2026-10-22", "uni": "C", "grupo": "GASTO COMUN", "detalle": "GC 2026-11 abono $85.000 (de pago $305.000 del 21/10, op. 609801686; comprobante: 'cuota extraordinaria más gastos de noviembre casa C'). Falta $20.000.", "egr": 0, "abo": 85000}, {"fecha": "2026-10-22", "uni": "C", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva completa (de pago $305.000 del 21/10)", "egr": 0, "abo": 200000}, {"fecha": "2026-10-23", "uni": "B", "grupo": "GASTO COMUN", "detalle": "GC 2026-10 (de pago $155k 23/10 · Empresa De Energía = Casa B)", "egr": 0, "abo": 105000}, {"fecha": "2026-10-23", "uni": "B", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva 2/4 (de pago $155k 23/10 · Empresa De Energía = Casa B)", "egr": 0, "abo": 50000}, {"fecha": "2026-11-01", "uni": "E", "grupo": "GASTO COMUN", "detalle": "GC 2026-11 (automático)", "egr": 0, "abo": 105000}, {"fecha": "2026-11-01", "uni": "E", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva 3/4 (automático)", "egr": 0, "abo": 50000}, {"fecha": "2026-11-01", "uni": "E", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva 4/4 (automático)", "egr": 0, "abo": 50000}, {"fecha": "2026-11-03", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero mensual", "egr": 235000, "abo": 0}, {"fecha": "2026-11-03", "uni": "COND", "grupo": "MANTENCION JARDIN", "detalle": "Jardinero poda extra", "egr": 80000, "abo": 0}, {"fecha": "2026-11-04", "uni": "D", "grupo": "GASTO COMUN", "detalle": "GC 2026-11", "egr": 0, "abo": 105000}, {"fecha": "2026-11-04", "uni": "D", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva", "egr": 0, "abo": 50000}, {"fecha": "2026-11-05", "uni": "H", "grupo": "GASTO COMUN", "detalle": "GC 2026-11", "egr": 0, "abo": 105000}, {"fecha": "2026-11-09", "uni": "G", "grupo": "GASTO COMUN", "detalle": "GC 2026-11", "egr": 0, "abo": 105000}, {"fecha": "2026-11-09", "uni": "G", "grupo": "FONDO RESERVA", "detalle": "Cuota extra fondo de reserva", "egr": 0, "abo": 50000}, {"fecha": "2026-11-24", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Aguas Andinas · Agua Cond Minerva · N° cliente 11730817 · boleta R20261113 (pago 24/11/2026 23:50, trx 476646, total $43.967 con Enel)", "egr": 940, "abo": 0}, {"fecha": "2026-11-24", "uni": "COND", "grupo": "CUENTAS BASICAS", "detalle": "Enel · Luz Cond Minerva · N° cliente 15590432 · boleta 010122920075 (pago 24/11/2026 23:50, trx 476646, total $43.967 con Aguas Andinas)", "egr": 43027, "abo": 0}]};
 const CASAS=['A','B','C','D','E','F','G','H'];
 const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-const COL={verde:'#1a5e2a',rojo:'#b4100f',azul:'#1565c0',morado:'#6a1b9a',ambar:'#c98a15',gris:'#6b6457'};
-const PALETA=['#1a5e2a','#1565c0','#c98a15','#6a1b9a','#b4100f','#2d7a3a','#5a8fce','#8a6d3b'];
-const fmt=n=>'$'+Math.round(n).toLocaleString('es-CL');
-const fmtK=n=>'$'+Math.round(n/1000)+'k';
-Chart.defaults.font.family="Inter,sans-serif";
-Chart.defaults.font.size=11;
-Chart.defaults.color='#6b6457';
+const COL={verde:'#15823c',ambar:'#c87f0a',rojo:'#c0271e',azul:'#1565c0',morado:'#7b2a9a',gris:'#8a8372'};
+const fmt=x=>{const s=x<0?'-':'';return s+'$'+Math.abs(Math.round(x)).toLocaleString('es-CL');};
+const fmtK=x=>'$'+Math.round(x/1000).toLocaleString('es-CL')+'k';
+Chart.defaults.font.family="Inter,sans-serif"; Chart.defaults.font.size=14; Chart.defaults.color='#6a6356';
 let charts={};
-function mk(id,cfg){ if(charts[id])charts[id].destroy(); const el=document.getElementById(id); if(el)charts[id]=new Chart(el,cfg); }
+function mk(id,cfg){if(charts[id])charts[id].destroy();const el=document.getElementById(id);if(el)charts[id]=new Chart(el,cfg);}
+function colorEstado(e){return e==='AL DÍA'?'verde':(e==='MOROSO'?'rojo':'ambar');}
 
-function hexA(hex,a){const h=hex.replace('#','');return `rgba(${parseInt(h.substr(0,2),16)},${parseInt(h.substr(2,2),16)},${parseInt(h.substr(4,2),16)},${a})`;}
-const casaColor=c=>PALETA[CASAS.indexOf(c)%PALETA.length];
-const valueLabels={id:'valueLabels',afterDatasetsDraw(chart){
-  const o=chart.options.plugins&&chart.options.plugins.valueLabels; if(!o||!o.on)return;
-  const ctx=chart.ctx,type=chart.config.type,horiz=chart.options.indexAxis==='y'; ctx.save(); ctx.font='700 10px Inter,sans-serif';
-  chart.data.datasets.forEach((ds,di)=>{const meta=chart.getDatasetMeta(di); if(meta.hidden)return;
-    meta.data.forEach((el,i)=>{const v=ds.data[i]; if(v==null||v===0)return;
-      if(type==='line'){ if(i!==meta.data.length-1)return; ctx.fillStyle=ds.borderColor||'#333'; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(fmtK(v),el.x+5,el.y);}
-      else if(horiz){ ctx.fillStyle='#333'; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(fmtK(v),el.x+4,el.y);}
-      else { ctx.fillStyle='#333'; ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.fillText(fmtK(v),el.x,el.y-3);} });});
-  ctx.restore();
-}};
-Chart.register(valueLabels);
-function renderFichas(sel){
-  const R=D.reporte_casa; const list=sel==='all'?CASAS:[sel];
-  document.getElementById('fichas').innerHTML='<div class="grid g2">'+list.map(c=>{
-    const r=R[c],col=casaColor(c); const esFavor=r.neto>0,esCero=r.neto===0;
-    const est=esCero?'AL DÍA':(esFavor?'A FAVOR '+fmt(r.neto):'DEBE '+fmt(-r.neto));
-    const ec=esCero?'#1a5e2a':(esFavor?'#1565c0':'#b4100f');
-    const rows=[['GC 2025 pagado',fmt(r.pag25)],['Debía pagar 2025',fmt(r.presu25)],['Deuda GC 2025',r.deuda25?fmt(r.deuda25):'—'],
-      ['GC 2026 pagado',fmt(r.pag26)],['Debía pagar 2026 (a la fecha)',fmt(r.presu26)],['Deuda GC 2026',r.deuda26?fmt(r.deuda26):'—'],
-      ['Cuota malla',r.malla_pag?'Pagada':'Pendiente'],['El condominio le debe',r.le_deben?fmt(r.le_deben):'—']];
-    return `<div class="card" style="border-top:4px solid ${col}"><h3 style="color:${col}">Casa ${c} · ${r.nombre}</h3>
-      <div style="display:inline-block;padding:3px 10px;border-radius:12px;font-weight:700;color:#fff;background:${ec};margin-bottom:8px">${est}</div>
-      <table style="width:100%;font-size:12px">${rows.map(x=>`<tr><td>${x[0]}</td><td style="text-align:right;font-weight:600">${x[1]}</td></tr>`).join('')}</table></div>`;
-  }).join('')+'</div>';
+// ---------- RESUMEN ----------
+function rResumen(){
+  const op=D.result_op_2026, cajaOp=D.caja_op;
+  const deben=CASAS.filter(c=>D.casas[c].deuda_total>0).sort((a,b)=>D.casas[b].deuda_total-D.casas[a].deuda_total);
+  const alDia=CASAS.filter(c=>D.casas[c].estado==='AL DÍA');
+  let h=`
+  <div class="headline">Hoy hay <span class="big inf">${fmt(D.caja_total)}</span> en la cuenta.
+    Pero <b>${fmt(D.reserva.rec)}</b> de eso es el <b>fondo de reserva</b> (ahorro que no se debe gastar).
+    La operación del día a día va con un pequeño déficit de <b class="neg">${fmt(cajaOp)}</b>, por las casas que no pagan.</div>
+
+  <div class="bloque b-op">
+    <div class="et">1 · Gasto común (la cuenta del día a día)</div>
+    <div class="cifra neg">${fmt(op)}</div>
+    <div class="expl">Es lo que entra por las cuotas de gasto común menos lo que cuesta mantener el condominio (agua, luz, jardinero…). Está en rojo <b>porque Casa A y Casa F no han pagado nada</b>. Si todos pagaran, sobraría plata.</div>
+    <div class="mini">
+      <div>Entró por cuotas <b class="num">${fmt(D.ing_op26)}</b></div>
+      <div>Se gastó <b class="num">${fmt(-D.egr_op26)}</b></div>
+      <div>Caja propia del gasto común <b class="num neg">${fmt(cajaOp)}</b></div>
+    </div>
+  </div>
+
+  <div class="bloque b-fondo">
+    <div class="et">2 · Fondos aparte (no son del día a día)</div>
+    <div class="cifra mor">${fmt(D.fondos_total)}</div>
+    <div class="expl">Dineros con destino propio, separados del gasto común.</div>
+    <div class="mini">
+      <div>Fondo de reserva (ahorro) <b class="num pos">+${fmt(D.reserva.sal)}</b></div>
+      <div>Cuota malla <b class="num neg">${fmt(D.malla.sal)}</b> <span style="font-size:13px;color:var(--gris)">(se gastó ${fmt(D.malla.gas)}, se juntó ${fmt(D.malla.rec)})</span></div>
+    </div>
+  </div>
+
+  <div class="bloque b-caja">
+    <div class="et">3 · Caja total en el banco</div>
+    <div class="cifra inf">${fmt(D.caja_total)}</div>
+    <div class="expl">Es la suma de todo. Si le restamos lo que el condominio debe devolver a las casas (${fmt(D.deuda_casas)}), la posición real es de <b class="${D.posicion_total>=0?'pos':'neg'}">${fmt(D.posicion_total)}</b>.</div>
+  </div>
+
+  <h2 class="sec" style="margin-top:22px">Cómo va cada casa</h2>
+  <div class="semaforo">`;
+  CASAS.forEach(c=>{
+    const x=D.casas[c], cl=colorEstado(x.estado);
+    h+=`<div class="semc s-${cl}"><div class="letra">${c}</div><div class="nm">${x.nombre.split(' ')[0]}</div><div class="est">${x.estado}</div></div>`;
+  });
+  h+=`</div>
+  <div class="aviso aviso-rojo" style="margin-top:14px"><b>Lo más urgente de cobrar:</b> Casa A debe ${fmt(D.casas.A.deuda_total)} y Casa F debe ${fmt(D.casas.F.deuda_total)}. Entre las dos son casi todo lo que falta por cobrar (${fmt(D.por_cobrar)} en total).</div>
+  <div class="acciones">
+    <div class="at">Qué hacer ahora</div>
+    <ol>
+      <li><b>Cobrar a Casa A y Casa F.</b> No han aportado nada de gasto común en 2026. Es la prioridad.</li>
+      <li><b>Pagar a Casa E</b> la devolución de 2024 (${fmt(D.deuda_det.E)}). Como el tesorero es a la vez quien recibe, conviene <b>dejarlo aprobado en acta</b> para respaldo de todos.</li>
+      <li><b>Completar el fondo de reserva:</b> faltan Casa A y Casa F (no han aportado); Casa B, D y G van parciales.</li>
+      <li>Revisar el gasto del jardín y las cuentas de agua, que son los más altos.</li>
+    </ol>
+  </div>`;
+  document.getElementById('resumen').innerHTML=h;
 }
 
-// ---- NAV ----
+// ---------- POR CASA ----------
+function rPorcasa(){
+  let h='<h2 class="sec">El detalle de cada casa, en pesos</h2><div class="fichas">';
+  CASAS.forEach(c=>{
+    const x=D.casas[c], cl=colorEstado(x.estado);
+    const cc={verde:COL.verde,ambar:COL.ambar,rojo:COL.rojo}[cl];
+    const pct=Math.round(x.avance*100);
+    const lineas=[];
+    if(x.deuda_gc26>0) lineas.push(['debe','Debe de gasto común 2026',fmt(x.deuda_gc26)]);
+    if(x.deuda_gc25>0) lineas.push(['debe','Debe de gasto común 2025',fmt(x.deuda_gc25)]);
+    if(x.deuda_fondo>0) lineas.push(['debe','Debe del fondo de reserva',fmt(x.deuda_fondo)]);
+    if(x.deuda_malla>0) lineas.push(['debe','Debe de la cuota malla',fmt(x.deuda_malla)]);
+    if(x.a_favor>0) lineas.push(['favor','El condominio le debe',fmt(x.a_favor)]);
+    if(lineas.length===0) lineas.push(['ok','Está al día en todo','✓']);
+    h+=`<div class="ficha">
+      <div class="cab" style="background:${cc}">
+        <div class="letra">${c}</div>
+        <div><div class="tit">Casa ${c} · ${x.nombre}</div><div class="estado">${x.estado}</div></div>
+      </div>
+      <div class="cuerpo">
+        <div class="barlbl"><span>Gasto común pagado</span><span>${pct}%</span></div>
+        <div class="barra"><span style="width:${pct}%;background:${cc}"></span></div>
+        <div class="lineas">
+          ${lineas.map(l=>`<div class="ln ${l[0]}"><span>${l[1]}</span><span class="v">${l[2]}</span></div>`).join('')}
+          <div class="ln"><span>Fondo de reserva aportado</span><span class="v" style="color:${x.fondo_pag>=200000?COL.verde:COL.gris}">${fmt(x.fondo_pag)} de $200.000</span></div>
+        </div>
+      </div></div>`;
+  });
+  h+='</div>';
+  document.getElementById('porcasa').innerHTML=h;
+}
+
+// ---------- GASTOS ----------
+function rGastos(){
+  const e=D.egr_op_cat, ent=Object.entries(e).sort((a,b)=>b[1]-a[1]);
+  const pal=['#15823c','#1565c0','#c87f0a','#7b2a9a','#c0271e','#2d7a4a','#5a8fce','#a06a1a'];
+  mk('cEgr26',{type:'doughnut',data:{labels:ent.map(x=>x[0]),datasets:[{data:ent.map(x=>x[1]),backgroundColor:ent.map((_,i)=>pal[i%pal.length]),borderWidth:3,borderColor:'#fff'}]},
+    options:{maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{boxWidth:14,padding:10,font:{size:13}}},tooltip:{callbacks:{label:c=>c.label+': '+fmt(c.raw)}}}}});
+  const cats=[...new Set([...Object.keys(D.egr25_cat),...Object.keys(D.egr_op_cat)])];
+  mk('cEgrComp',{type:'bar',data:{labels:cats,datasets:[
+    {label:'2025',data:cats.map(c=>D.egr25_cat[c]||0),backgroundColor:COL.gris,borderRadius:5},
+    {label:'2026',data:cats.map(c=>D.egr_op_cat[c]||0),backgroundColor:COL.verde,borderRadius:5}]},
+    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'bottom'}},scales:{x:{ticks:{callback:fmtK}}}}});
+}
+
+// ---------- MES A MES ----------
+function rMes(){
+  const meses=MESES.slice(0,11);
+  mk('cFlujo',{type:'bar',data:{labels:meses,datasets:[
+    {label:'Entró',data:D.flujo.slice(0,11).map(f=>f.ing),backgroundColor:COL.verde,borderRadius:5},
+    {label:'Salió',data:D.flujo.slice(0,11).map(f=>f.egr),backgroundColor:COL.rojo,borderRadius:5}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:fmtK}}}}});
+  mk('cCaja',{type:'line',data:{labels:meses,datasets:[{label:'Caja',data:D.flujo.slice(0,11).map(f=>f.caja),
+    borderColor:COL.azul,backgroundColor:'rgba(21,101,192,.12)',fill:true,tension:.3,pointRadius:4,borderWidth:3}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:fmtK}}}}});
+}
+
+// ---------- FONDOS ----------
+function rFondos(){
+  let h=`<h2 class="sec">Fondos con destino propio</h2>
+  <div class="g2">
+    <div class="card" style="border-left:8px solid var(--morado)">
+      <h3>Fondo de reserva</h3>
+      <div class="desc">Cuota extraordinaria de $200.000 por casa (4 de $50.000). Es ahorro del condominio.</div>
+      <div style="font-size:40px;font-weight:800;color:var(--morado)" class="num">+${fmt(D.reserva.sal)}</div>
+      <div class="lineas" style="margin-top:12px">
+        <div class="ln"><span>Juntado hasta hoy</span><span class="v">${fmt(D.reserva.rec)}</span></div>
+        <div class="ln"><span>Gastado</span><span class="v">$0</span></div>
+        <div class="ln ok"><span>Saldo ahorrado</span><span class="v">${fmt(D.reserva.sal)}</span></div>
+      </div>
+      <div class="chart-box" style="height:230px;margin-top:14px"><canvas id="cFondoR"></canvas></div>
+    </div>
+    <div class="card" style="border-left:8px solid var(--rojo)">
+      <h3>Cuota malla</h3>
+      <div class="desc">Cuota única de $20.000 por casa para la malla. Se gastó más de lo juntado.</div>
+      <div style="font-size:40px;font-weight:800;color:var(--rojo)" class="num">${fmt(D.malla.sal)}</div>
+      <div class="lineas" style="margin-top:12px">
+        <div class="ln"><span>Juntado</span><span class="v">${fmt(D.malla.rec)}</span></div>
+        <div class="ln debe"><span>Gastado (material)</span><span class="v">${fmt(D.malla.gas)}</span></div>
+        <div class="ln debe"><span>Déficit (lo cubrió la caja)</span><span class="v">${fmt(D.malla.sal)}</span></div>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('fondos').innerHTML=h;
+  const pagos=CASAS.map(c=>D.casas[c].fondo_pag);
+  mk('cFondoR',{type:'bar',data:{labels:CASAS.map(c=>'Casa '+c),datasets:[
+    {label:'Aportado',data:pagos,backgroundColor:COL.verde,borderRadius:4,stack:'s'},
+    {label:'Falta',data:CASAS.map(c=>Math.max(0,200000-D.casas[c].fondo_pag)),backgroundColor:'#e4ddd0',borderRadius:4,stack:'s'}]},
+    options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:fmtK}}}}});
+}
+
+// ---------- COMPROMISOS ----------
+function rCompromisos(){
+  const dd=D.deuda_det;
+  let h=`<h2 class="sec">Lo que el condominio debe devolver</h2>
+  <div class="aviso aviso-rojo">El condominio recibió la caja en <b>cero</b> de la administración anterior y arrastra devoluciones a las casas que adelantaron gastos. Total a devolver: <b>${fmt(D.deuda_casas)}</b>.</div>
+  <div class="fichas">
+    <div class="ficha"><div class="cab" style="background:var(--morado)"><div class="letra">E</div><div><div class="tit">Casa E · Franco Catinello</div><div class="estado">Devolución 2024</div></div></div>
+      <div class="cuerpo"><div style="font-size:34px;font-weight:800;color:var(--morado)" class="num">${fmt(dd.E)}</div><div style="color:var(--gris);font-size:15px">Mantención de infraestructura 2024 que Casa E adelantó. Conviene aprobar el pago en acta.</div></div></div>
+    <div class="ficha"><div class="cab" style="background:var(--morado)"><div class="letra">H</div><div><div class="tit">Casa H · Roberto Bonnefoy</div><div class="estado">Devolución 2024 + ajuste</div></div></div>
+      <div class="cuerpo"><div style="font-size:34px;font-weight:800;color:var(--morado)" class="num">${fmt(dd.H)}</div><div style="color:var(--gris);font-size:15px">Mantención de jardín 2024 ($140.000) más $5.000 que pagó de más en septiembre.</div></div></div>
+    <div class="ficha"><div class="cab" style="background:var(--morado)"><div class="letra">B</div><div><div class="tit">Casa B · Augusto Quintana</div><div class="estado">Saldo a favor</div></div></div>
+      <div class="cuerpo"><div style="font-size:34px;font-weight:800;color:var(--morado)" class="num">${fmt(dd.B)}</div><div style="color:var(--gris);font-size:15px">Pago de más realizado el 24 de agosto. Queda a favor de Casa B.</div></div></div>
+  </div>`;
+  document.getElementById('compromisos').innerHTML=h;
+}
+
+// ---------- REGISTRO ----------
+function initReg(){
+  const casas=[...new Set(D.movs.map(m=>m.uni))].sort();
+  document.getElementById('fCasa').innerHTML='<option value="">Todas las casas</option>'+casas.map(c=>`<option>${c}</option>`).join('');
+  ['fCasa','fTipo'].forEach(id=>document.getElementById(id).onchange=rReg);
+  document.getElementById('fTexto').oninput=rReg;
+}
+function rReg(){
+  const c=document.getElementById('fCasa').value,t=document.getElementById('fTipo').value,q=document.getElementById('fTexto').value.toLowerCase();
+  let rows=D.movs.filter(m=>{if(c&&m.uni!=c)return false;if(t==='abo'&&m.abo<=0)return false;if(t==='egr'&&m.egr<=0)return false;if(q&&!m.detalle.toLowerCase().includes(q))return false;return true;}).sort((a,b)=>a.fecha<b.fecha?1:-1);
+  document.getElementById('fCount').textContent=rows.length+' movimientos';
+  document.getElementById('tbody').innerHTML=rows.map(m=>`<tr><td>${m.fecha.split('-').reverse().join('/')}</td><td><b>${m.uni}</b></td><td>${m.detalle}</td><td style="text-align:right" class="money-a">${m.abo?fmt(m.abo):''}</td><td style="text-align:right" class="money-e">${m.egr?fmt(m.egr):''}</td></tr>`).join('');
+}
+
+function render(p){
+  if(p==='resumen')rResumen();
+  else if(p==='porcasa')rPorcasa();
+  else if(p==='gastos')rGastos();
+  else if(p==='mes')rMes();
+  else if(p==='fondos')rFondos();
+  else if(p==='compromisos')rCompromisos();
+  else if(p==='registro')rReg();
+}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));
   document.querySelectorAll('.panel').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  document.getElementById(b.dataset.p).classList.add('on');
-  render(b.dataset.p);
+  b.classList.add('on');document.getElementById(b.dataset.p).classList.add('on');render(b.dataset.p);
 });
-
-// ---- KPIs ----
-function kpis(){
-  const k=D.kpi;
-  const cards=[
-    {lbl:'Ingresos 2025',val:fmt(k.ing25),note:'Cuotas cobradas',bar:'verde'},
-    {lbl:'Egresos 2025',val:fmt(k.egr25),note:'Gastos del año',bar:'rojo'},
-    {lbl:'Ingresos 2026',val:fmt(k.ing26),note:'Ene–jun (parcial)',bar:'verde'},
-    {lbl:'Egresos 2026',val:fmt(k.egr26),note:'Ene–jun (parcial)',bar:'rojo'},
-    {lbl:'Resultado 2025',val:fmt(k.ing25-k.egr25),note:'Superávit del año',bar:'verde',cls:(k.ing25-k.egr25)>=0?'pos':'neg'},
-    {lbl:'Resultado 2026',val:fmt(k.ing26-k.egr26),note:'Déficit parcial',bar:'rojo',cls:(k.ing26-k.egr26)>=0?'pos':'neg'},
-    {lbl:'Saldo de caja',val:fmt(k.caja),note:'Acumulado actual',bar:'azul',cls:k.caja>=0?'pos':'neg'},
-    {lbl:'Compromisos pend.',val:fmt(k.oblig_fut),note:'Deudas heredadas',bar:'morado'},
-  ];
-  document.getElementById('kpis').innerHTML=cards.map(c=>
-    `<div class="kpi"><div class="bar b-${c.bar}"></div><div class="lbl">${c.lbl}</div>
-     <div class="val ${c.cls||''}">${c.val}</div><div class="note">${c.note}</div></div>`).join('');
-}
-
-// ---- RESUMEN ----
-function rGerencial(){
-  const k=D.kpi,R=D.reporte_casa,dc=D.deuda_condominio;
-  const deben=[],aldia=[];
-  CASAS.forEach(c=>{const d=R[c].debe_total||0; if(d>1)deben.push([c,d]); else aldia.push(c);});
-  deben.sort((a,b)=>b[1]-a[1]);
-  const porCobrar=deben.reduce((s,x)=>s+x[1],0);
-  const deudaCond=Object.values(dc).reduce((s,v)=>s+v,0);
-  const caja=k.caja, posTotal=caja-deudaCond;
-  const expTesorero=(dc.E||0)+Math.abs(caja); // devolución 2024 + déficit que cubre de su bolsillo
-  const cuotaProp=100000, presupProp=9600000;
-  const html=`<div class="ger">
-    <h2>Resumen gerencial</h2>
-    <div class="ger-sub">Situación financiera 2025 (cerrado) y 2026 (enero–agosto) · 8 casas · lectura crítica</div>
-    <div class="headline">Déficit de caja de <span class="big neg">${fmt(Math.abs(caja))}</span>
-      &nbsp;·&nbsp; posición total (con devoluciones pendientes) <span class="big neg">${fmt(Math.abs(posTotal))}</span></div>
-    <p><strong>Esto no es un problema de gasto, es un problema de cobranza — y es grave.</strong>
-      Solo ${aldia.length} de 8 casas están al día; las otras ${deben.length} deben <strong>${fmt(porCobrar)}</strong> en cuotas.
-      Mientras no se cobre, ese déficit lo financia de su bolsillo el tesorero, porque la cuenta es personal suya. No es sostenible.</p>
-    <div class="puntos">
-      <div class="pt"><span class="mk" style="background:var(--rojo)"></span><div><strong>Morosidad crónica (${deben.length} casas):</strong> ${deben.map(d=>'Casa '+d[0]+' '+fmt(d[1])).join(', ')}. Casa F no ha pagado <strong>nada</strong> en 2026.</div></div>
-      <div class="pt"><span class="mk" style="background:var(--ambar)"></span><div><strong>Deuda con el tesorero a la fecha: ${fmt(expTesorero)}.</strong> El condominio le debe a Casa E ${fmt(dc.E||0)} de la devolución 2024 y además el tesorero cubre con su cuenta personal el déficit de caja de ${fmt(Math.abs(caja))}. Cada mes sin cobrar, <strong>aumenta la deuda</strong>.</div></div>
-      <div class="pt"><span class="mk" style="background:var(--morado)"></span><div><strong>Devoluciones 2024 aún impagas:</strong> Casa E ${fmt(dc.E||0)} y Casa H ${fmt(dc.H||0)} = ${fmt(deudaCond)}. Casa B pagó $180.000 el 24/08: quedó al día y con $6.895 a su favor (cuentas por pagar).</div></div>
-    </div>
-    <div class="acciones">
-      <div class="at">Cuota recomendada para el condominio (desde enero del próximo año)</div>
-      <ol>
-        <li><strong>La cuota debe subir a ${fmt(cuotaProp)} por casa al mes.</strong> Con eso el ingreso anual (${fmt(presupProp)}) cubre exactamente el presupuesto propuesto: gastos operativos, aumento del jardinero (+$15.000/mes), mantención de infraestructura, las devoluciones pendientes 2024 y un fondo de reserva.</li>
-        <li>Detalle del presupuesto propuesto ($9.600.000): agua $2.900.000 · luz $350.000 · jardinero $3.000.000 · jardín $240.000 · seguridad $863.385 · aguinaldos $110.000 · mantención infraestructura $700.000 · devoluciones E+H $725.000 · fondo de reserva $711.615.</li>
-        <li><strong>Verdad incómoda:</strong> la cuota actual de $95.000 YA alcanzaría si las 8 casas pagaran. El déficit no viene del monto de la cuota, viene de la morosidad. Sin cobranza efectiva (cartas de cobro, intereses por mora y dejar de financiar el hueco con la caja personal del tesorero), ninguna cuota será suficiente.</li>
-      </ol>
-    </div>
-  </div>`;
-  document.getElementById('gerencial').innerHTML=html;
-}
-function rResumen(){
-  rGerencial(); kpis();
-  const a=resumenState.anio;
-  document.getElementById('segAnioRes').innerHTML=[['todos','Todos'],['2025','2025'],['2026','2026']].map(([v,l])=>`<button class="seg${a===v?' on':''}" data-anio="${v}">${l}</button>`).join('');
-  document.querySelectorAll('#segAnioRes .seg').forEach(b=>b.onclick=()=>{resumenState.anio=b.dataset.anio;rResumen();});
-  let L,I,E;
-  if(a==='todos'){L=['2025','2026 (ene-ago)'];I=[D.kpi.ing25,D.kpi.ing26];E=[D.kpi.egr25,D.kpi.egr26];}
-  else if(a==='2025'){L=['2025'];I=[D.kpi.ing25];E=[D.kpi.egr25];}
-  else{L=['2026 (ene-ago)'];I=[D.kpi.ing26];E=[D.kpi.egr26];}
-  mk('cIngEgr',{type:'bar',data:{labels:L,datasets:[
-    {label:'Ingresos',data:I,backgroundColor:COL.verde,borderRadius:5},
-    {label:'Egresos',data:E,backgroundColor:COL.rojo,borderRadius:5}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},valueLabels:{on:true}},scales:{y:{ticks:{callback:fmtK}}}}});
-  const est=a==='2025'?D.estado25:D.estado26; let ad=0,de=0;
-  CASAS.forEach(c=>{const s=est[c].saldo; if(s>=0)ad++;else de++;});
-  mk('cEstado',{type:'doughnut',data:{labels:['Al día','Con deuda'],datasets:[{data:[ad,de],backgroundColor:[COL.verde,COL.rojo],borderWidth:2,borderColor:'#fff'}]},
-    options:{maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'bottom'}}}});
-  let cats={};
-  if(a!=='2026')Object.entries(D.egr25).forEach(([k,v])=>cats[k.trim()]=(cats[k.trim()]||0)+v);
-  if(a!=='2025')Object.entries(D.egr26).forEach(([k,v])=>cats[k.trim()]=(cats[k.trim()]||0)+v);
-  const ent=Object.entries(cats).sort((x,y)=>y[1]-x[1]);
-  mk('cEgrCat',{type:'bar',data:{labels:ent.map(e=>e[0]),datasets:[{label:'Gastado',data:ent.map(e=>e[1]),backgroundColor:ent.map((_,i)=>PALETA[i%PALETA.length]),borderRadius:5}]},
-    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},valueLabels:{on:true}},scales:{x:{ticks:{callback:fmtK}}}}});
-}
-let resumenState={anio:'todos'};
-
-// ---- CASAS (GC por casa: acumulado + Todos/2025/2026 + por casa) ----
-let casaState={anio:'todos',casa:'all'};
-function rCasas(){
-  const anio=casaState.anio, sel=casaState.casa;
-  let labels, gcData;
-  if(anio==='todos'){
-    labels=MESES.map(m=>m+' 25').concat(MESES.slice(0,8).map(m=>m+' 26'));
-    gcData=c=>D.gc25[c].concat(D.gc26[c].slice(0,8));
-  }else{
-    const gc=anio==='2026'?D.gc26:D.gc25, meses=anio==='2026'?8:12;
-    labels=MESES.slice(0,meses); gcData=c=>gc[c].slice(0,meses);
-  }
-  document.getElementById('descCasa').textContent='Pagos de GC acumulados · '+(anio==='todos'?'2025 + 2026 (continuo)':(anio==='2026'?'enero a agosto 2026':'año completo 2025'))+' · Casa H: su pago de enero 2025 se grafica pero NO suma a los totales.';
-  document.getElementById('segAnioCasa').innerHTML=[['todos','Todos'],['2025','2025'],['2026','2026']].map(([v,l])=>`<button class="seg${anio===v?' on':''}" data-anio="${v}">${l}</button>`).join('');
-  document.getElementById('segCasa').innerHTML='<button class="seg'+(sel==='all'?' on':'')+'" data-casa="all">Todas</button>'+
-    CASAS.map(c=>{const col=casaColor(c),on=sel===c;return `<button class="seg${on?' on':''}" data-casa="${c}" style="border-color:${col}${on?';background:'+col+';color:#fff':';color:'+col}">${c}</button>`;}).join('');
-  document.querySelectorAll('#segAnioCasa .seg').forEach(b=>b.onclick=()=>{casaState.anio=b.dataset.anio;rCasas();});
-  document.querySelectorAll('#segCasa .seg').forEach(b=>b.onclick=()=>{casaState.casa=b.dataset.casa;rCasas();});
-  const acc=arr=>{let s=0;return arr.map(v=>s+=v);};
-  let datasets;
-  if(sel==='all') datasets=CASAS.map(c=>({label:'Casa '+c,data:acc(gcData(c)),borderColor:casaColor(c),backgroundColor:casaColor(c),borderWidth:2,tension:.25,pointRadius:1.5,fill:false}));
-  else datasets=[{label:'Casa '+sel,data:acc(gcData(sel)),borderColor:casaColor(sel),backgroundColor:hexA(casaColor(sel),.13),borderWidth:2.5,tension:.25,pointRadius:3,fill:true}];
-  mk('cCasasMes',{type:'line',data:{labels,datasets},
-    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',display:sel==='all'},valueLabels:{on:sel!=='all'},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)+' acum.'}}},
-      scales:{y:{ticks:{callback:fmtK}}}}});
-  renderFichas(sel);
-}
-
-// ---- GASTOS ----
-function pieLeg(id,ent,total){
-  document.getElementById(id).innerHTML='<table>'+ent.map((e,i)=>{const col=PALETA[i%PALETA.length],pct=Math.round(e[1]/total*100);
-    return `<tr><td><span class="dot" style="background:${col}"></span>${e[0]}</td><td class="v">${fmt(e[1])}</td><td class="v" style="color:#999">${pct}%</td></tr>`;}).join('')+
-    `<tr style="border-top:1px solid #ddd"><td><strong>Total</strong></td><td class="v"><strong>${fmt(total)}</strong></td><td></td></tr></table>`;
-}
-function gastoChart(id,legId,obj){
-  const ent=Object.entries(obj).sort((a,b)=>b[1]-a[1]); const total=ent.reduce((s,e)=>s+e[1],0);
-  mk(id,{type:'doughnut',data:{labels:ent.map(e=>e[0]),datasets:[{data:ent.map(e=>e[1]),backgroundColor:ent.map((_,i)=>PALETA[i%PALETA.length]),borderWidth:2,borderColor:'#fff'}]},
-    options:{maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.label+': '+fmt(ctx.raw)}}}}});
-  pieLeg(legId,ent,total);
-}
-function rGastos(){
-  gastoChart('cEgr25','legEgr25',D.egr25);
-  gastoChart('cEgr26','legEgr26',D.egr26);
-  const cats=[...new Set([...Object.keys(D.egr25),...Object.keys(D.egr26)])];
-  mk('cEgrComp',{type:'bar',data:{labels:cats,
-    datasets:[{label:'2025',data:cats.map(c=>D.egr25[c]||0),backgroundColor:COL.azul,borderRadius:4},
-              {label:'2026',data:cats.map(c=>D.egr26[c]||0),backgroundColor:COL.verde,borderRadius:4}]},
-    options:{maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'bottom'},valueLabels:{on:true}},scales:{x:{ticks:{callback:fmtK}}}}});
-}
-
-// ---- FLUJO ----
-let flujoState={anio:'2026'};
-function rFlujo(){
-  const anio=flujoState.anio;
-  let labels,ingA,egrA,opening=0;
-  if(anio==='todos'){
-    labels=MESES.map(m=>m+' 25').concat(MESES.slice(0,8).map(m=>m+' 26'));
-    ingA=D.flujo25.ing.concat(D.flujo26.ing.slice(0,8)); egrA=D.flujo25.egr.concat(D.flujo26.egr.slice(0,8));
-  }else{
-    const f=anio==='2026'?D.flujo26:D.flujo25, meses=anio==='2026'?8:12;
-    labels=MESES.slice(0,meses); ingA=f.ing.slice(0,meses); egrA=f.egr.slice(0,meses);
-    if(anio==='2026') opening=161309;
-  }
-  document.getElementById('segAnioFlujo').innerHTML=[['todos','Todos'],['2025','2025'],['2026','2026']].map(([v,l])=>`<button class="seg${anio===v?' on':''}" data-anio="${v}">${l}</button>`).join('');
-  document.querySelectorAll('#segAnioFlujo .seg').forEach(b=>b.onclick=()=>{flujoState.anio=b.dataset.anio;rFlujo();});
-  mk('cFlujo',{type:'bar',data:{labels,datasets:[
-    {label:'Ingresos',data:ingA,backgroundColor:COL.verde,borderRadius:4},
-    {label:'Egresos',data:egrA,backgroundColor:COL.rojo,borderRadius:4}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'}},scales:{y:{ticks:{callback:fmtK}}}}});
-  let ai=opening,ae=0;const ing=[],egr=[];
-  for(let i=0;i<ingA.length;i++){ai+=ingA[i];ae+=egrA[i];ing.push(ai);egr.push(ae);}
-  mk('cAcum',{type:'line',data:{labels,datasets:[
-    {label:'Ingreso acumulado'+(opening?' (parte con superávit 2025 +$161.309)':''),data:ing,borderColor:COL.verde,backgroundColor:hexA(COL.verde,.13),fill:'+1',tension:.35,pointRadius:2.5,borderWidth:2.5},
-    {label:'Egreso acumulado',data:egr,borderColor:COL.rojo,backgroundColor:hexA(COL.rojo,.10),fill:false,tension:.35,pointRadius:2.5,borderWidth:2.5}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},valueLabels:{on:true},
-      tooltip:{callbacks:{footer:it=>{const i=it[0].dataIndex,d=ing[i]-egr[i];return (d>=0?'Superávit acum.: ':'Déficit acum.: ')+fmt(d);}}}},
-      scales:{y:{ticks:{callback:fmtK}}}}});
-}
-
-// ---- COMPROMISOS ----
-function rOblig(){
-  const dc=D.deuda_condominio; const nom={E:'Mantención infraestructura 2024',H:'Mantención jardín 2024'};
-  document.getElementById('kpiOblig').innerHTML=Object.entries(dc).map(([c,v])=>
-    `<div class="kpi"><div class="bar b-morado"></div><div class="lbl">Casa ${c}</div><div class="val">${fmt(v)}</div><div class="note">${nom[c]}</div></div>`).join('')+
-    `<div class="kpi"><div class="bar b-rojo"></div><div class="lbl">Casa B</div><div class="val neg">-${fmt(173105)}</div><div class="note">DEBE al condominio (motor ya aplicado)</div></div>`;
-  mk('cOblig',{type:'bar',data:{labels:['Casa E','Casa H'],
-    datasets:[{label:'El condominio debe devolver',data:[dc.E,dc.H],backgroundColor:COL.morado,borderRadius:5}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{display:false},valueLabels:{on:true}},scales:{y:{ticks:{callback:fmtK}}}}});
-  const rows=[
-    ['Crédito motor 2024 a favor de Casa B','+'+fmt(666895),''],
-    ['Aplicado a GC 2025 · abril–noviembre (8 meses completos × $80.000)','-'+fmt(640000),''],
-    ['Aplicado a GC 2025 · diciembre (parcial, de $80.000)','-'+fmt(26895),''],
-    ['Saldo del motor a favor de Casa B',fmt(0),'tot'],
-    ['GC 2025 · diciembre (resto no cubierto)','debe '+fmt(53105),'deb'],
-    ['GC 2026 · cuotas incompletas a la fecha','debe '+fmt(120000),'deb'],
-    ['TOTAL que debe Casa B (solo cuotas de GC)','debe '+fmt(173105),'tot']];
-  document.getElementById('netoB').innerHTML=rows.map(x=>{
-    const st=(x[2]==='tot'?'font-weight:700;border-top:1px solid #ddd;':'')+(x[2]==='deb'||x[0].startsWith('TOTAL')&&x[2]==='tot'?'':'');
-    const col=(x[2]==='deb'||x[0].startsWith('TOTAL'))?'color:var(--rojo);':'';
-    return `<tr style="${st}${col}"><td>${x[0]}</td><td style="text-align:right;font-weight:600">${x[1]}</td></tr>`;}).join('');
-}
-function initFiltros(){
-  const casas=[...new Set(D.movs.map(m=>m.uni))].sort();
-  document.getElementById('fCasa').innerHTML='<option value="">Todas las casas</option>'+casas.map(c=>`<option>${c}</option>`).join('');
-  const grupos=[...new Set(D.movs.map(m=>m.grupo))].sort();
-  document.getElementById('fGrupo').innerHTML='<option value="">Todos los grupos</option>'+grupos.map(g=>`<option>${g}</option>`).join('');
-  ['fAnio','fCasa','fGrupo','fTipo'].forEach(id=>document.getElementById(id).onchange=rRegistro);
-  document.getElementById('fTexto').oninput=rRegistro;
-}
-function rRegistro(){
-  const a=document.getElementById('fAnio').value, c=document.getElementById('fCasa').value,
-        g=document.getElementById('fGrupo').value, t=document.getElementById('fTipo').value,
-        q=document.getElementById('fTexto').value.toLowerCase();
-  let rows=D.movs.filter(m=>{
-    if(a&&m.anio!=a)return false;
-    if(c&&m.uni!=c)return false;
-    if(g&&m.grupo!=g)return false;
-    if(t==='abo'&&m.abo<=0)return false;
-    if(t==='egr'&&m.egr<=0)return false;
-    if(q&&!m.detalle.toLowerCase().includes(q))return false;
-    return true;
-  }).sort((x,y)=>x.fecha<y.fecha?1:-1);
-  document.getElementById('fCount').textContent=rows.length+' movimientos';
-  document.getElementById('tbody').innerHTML=rows.map(m=>
-    `<tr><td>${m.fecha.split('-').reverse().join('/')}</td><td>${m.anio}</td>
-     <td><span class="casa-pill">${m.uni}</span></td><td>${m.grupo}</td>
-     <td>${m.detalle}</td>
-     <td style="text-align:right" class="money-e">${m.egr?fmt(m.egr):''}</td>
-     <td style="text-align:right" class="money-a">${m.abo?fmt(m.abo):''}</td>
-     <td><span class="tag t-${m.status}">${m.status}</span></td></tr>`).join('');
-}
-
-// ---- ROUTER ----
-// ---- EXTRAS: malla y llaves ----
-function rMalla(){
-  const m=D.malla;
-  const recaud=CASAS.reduce((s,c)=>s+(m.pagos[c]||0),0);
-  const gastado=168000; // material comprado (falta instalación)
-  document.getElementById('kpiMalla').innerHTML=[
-    {lbl:'Presupuesto',val:m.presupuesto,bar:'azul',note:'8 casas × $20.000'},
-    {lbl:'Recaudado',val:recaud,bar:'verde',note:Math.round(recaud/m.presupuesto*100)+'% del presupuesto'},
-    {lbl:'Gastado a la fecha',val:gastado,bar:'rojo',note:'Material · falta instalación'}
-  ].map(k=>`<div class="kpi"><div class="bar b-${k.bar}"></div><div class="lbl">${k.lbl}</div><div class="val">${fmt(k.val)}</div><div class="note">${k.note}</div></div>`).join('');
-  mk('cMalla',{type:'bar',data:{labels:CASAS.map(c=>'Casa '+c),
-    datasets:[
-      {label:'Pagó',data:CASAS.map(c=>m.pagos[c]>0?m.cuota:0),backgroundColor:COL.verde,borderRadius:4},
-      {label:'Pendiente',data:CASAS.map(c=>m.pagos[c]>0?0:m.cuota),backgroundColor:COL.rojo,borderRadius:4}
-    ]},
-    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom'},
-      tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+fmt(ctx.raw)}}},
-      scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:fmtK}}}}});
-}
-function rLlaves(){
-  const l=D.llaves;
-  document.getElementById('kpiLlaves').innerHTML=[
-    {lbl:'Presupuesto',val:l.presupuesto,bar:'azul'},
-    {lbl:'Ingreso (reembolsos)',val:l.ingreso,bar:'verde'},
-    {lbl:'Egreso (compra)',val:l.egreso,bar:'rojo'},
-  ].map(k=>`<div class="kpi"><div class="bar b-${k.bar}"></div><div class="lbl">${k.lbl}</div>
-     <div class="val">${fmt(k.val)}</div></div>`).join('');
-  mk('cLlaves',{type:'bar',data:{labels:CASAS.map(c=>'Casa '+c),
-    datasets:[{label:'Reembolso por casa',data:CASAS.map(c=>l.reembolsos[c]||0),
-      backgroundColor:COL.azul,borderRadius:4}]},
-    options:{maintainAspectRatio:false,plugins:{legend:{display:false},
-      tooltip:{callbacks:{label:ctx=>fmt(ctx.raw)}}},scales:{y:{ticks:{callback:fmtK}}}}});
-}
-
-// ---- POR CASA: reporte individual ----
-function render(p){
-  if(p==='resumen')rResumen();
-  else if(p==='casas')rCasas();
-  else if(p==='gastos')rGastos();
-  else if(p==='flujo')rFlujo();
-  else if(p==='oblig')rOblig();
-  else if(p==='extras'){rMalla();rLlaves();}
-  else if(p==='registro')rRegistro();
-}
-initFiltros();
+initReg();
 render('resumen');
 </script>
 </body>
